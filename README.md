@@ -14,6 +14,9 @@ repeat playback, a big-text practice mode, and a Tawaf/Sa'i round counter.
     npm start            # builds, then serves on http://localhost:4173
 
 ## Deploy
+Live: https://iamqasimali.github.io/labbayk-umrah-companion/ (GitHub Pages, redeploys on every push to `main`
+via `.github/workflows/pages.yml`).
+
 Vercel:   `vercel login` once, then `npm run deploy:vercel`
 Netlify:  `netlify login` once, then `npm run deploy:netlify`
 Both read their settings from `vercel.json` / `netlify.toml` (build: `node scripts/build.mjs`, output: `public`).
