@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Labbayk Umrah Companion</title>
+<meta name="description" content="Umrah steps and duas in Arabic, Roman Urdu, Urdu and English, with repeat playback, a big-text practice mode and a Tawaf/Sa'i counter. Works offline.">
+<meta name="theme-color" content="#0d0e0f">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Labbayk">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/ScheherazadeNew-400-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<style>
+/* Layout: kiswa-black hero band with gold, then a marble-white journey timeline of dua cards, a tawaf counter, places, checklist. */
+:root{
+  --bg:#f1f2ee; --surface:#ffffff; --surface-2:#e8eae4; --ink:#17191a; --muted:#585e5a; --line:#d8dbd4;
+  --gold:#94701f; --gold-bright:#c9a54d; --gold-soft:#efe5c8; --hl:rgba(201,165,77,.20);
+  --green:#1d6a4c; --green-soft:#dcebe3;
+  --kiswa:#0d0e0f; --kiswa-2:#17191b; --kiswa-ink:#efe7d2; --kiswa-muted:#a9a28f;
+  --danger:#a33a2a;
+  --f-display:"Marcellus","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-ar:"Scheherazade New","Geeza Pro","Traditional Arabic","Amiri",serif;
+  --f-ur:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq","Urdu Typesetting","Geeza Pro",serif;
+  --ar-size:2.1rem;
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b0c0d; --surface:#141618; --surface-2:#1c1f21; --ink:#ece7da; --muted:#a3a49c; --line:#2a2e30;
+  --gold:#d6b25e; --gold-bright:#e2c06d; --gold-soft:#2e2717; --hl:rgba(214,178,94,.18);
+  --green:#5cb88f; --green-soft:#16271f; --danger:#e2826f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b0c0d; --surface:#141618; --surface-2:#1c1f21; --ink:#ece7da; --muted:#a3a49c; --line:#2a2e30;
+  --gold:#d6b25e; --gold-bright:#e2c06d; --gold-soft:#2e2717; --hl:rgba(214,178,94,.18);
+  --green:#5cb88f; --green-soft:#16271f; --danger:#e2826f; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--kiswa)}
+h1,h2,h3,h4{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0;line-height:1.2}
+p{margin:0}
+a{color:var(--gold)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold-bright);outline-offset:2px;border-radius:6px}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600}
+[lang="ar"]{font-family:var(--f-ar);direction:rtl}
+[lang="ur"]{font-family:var(--f-ur);direction:rtl;line-height:2.3}
+svg{flex-shrink:0}
+
+/* progress bar */
+.progress{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:3px;background:var(--gold-bright);transform-origin:0 50%;transform:scaleX(0);z-index:70}
+@supports (animation-timeline: scroll()){ .progress{animation:grow linear both;animation-timeline:scroll(root)} }
+@keyframes grow{to{transform:scaleX(1)}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;background:var(--kiswa);color:var(--kiswa-ink);overflow:hidden;isolation:isolate}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1;opacity:.9}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:22px;height:5px;z-index:-1;
+  background:linear-gradient(90deg,transparent,#c9a54d 12%,#e2c06d 50%,#c9a54d 88%,transparent);opacity:.7}
+.hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;padding-block:56px 88px}
+.hero h1{font-size:clamp(2.4rem,7vw,4.4rem);letter-spacing:.01em;color:#f5ecd2}
+.hero .ar-title{font-family:var(--f-ar);font-size:clamp(2.2rem,6vw,3.4rem);color:#e2c06d;line-height:1.4;direction:rtl;text-align:left}
+.hero .lede{color:var(--kiswa-muted);max-width:46ch;margin-top:14px;font-size:1.05rem}
+.trip{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(226,192,109,.4);border-radius:999px;padding:7px 14px;font-size:.9rem;color:#efe7d2;background:rgba(255,255,255,.03)}
+.chip strong{color:#e2c06d;font-weight:600}
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 20px;border:1px solid var(--line);background:var(--surface);font-weight:600;text-decoration:none;color:var(--ink);min-height:46px}
+.btn-gold{background:#c9a54d;border-color:#c9a54d;color:#141210}
+.btn-ghost-dark{background:transparent;border-color:rgba(226,192,109,.45);color:#efe7d2}
+.ring{width:100%;max-width:300px;justify-self:center;aspect-ratio:1}
+.ring svg{width:100%;height:100%;overflow:visible}
+.ring .spin{transform-origin:150px 150px;animation:spin 90s linear infinite}
+.ring text{font-family:var(--f-ar);fill:#e2c06d;font-size:21px}
+@keyframes spin{to{transform:rotate(-360deg)}}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding-block:8px}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;color:var(--muted);font-weight:600;font-size:.9rem;padding:8px 12px;border-radius:999px;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--surface-2)}
+.nav .sizer{margin-left:auto;display:flex;gap:4px;flex:none}
+.nav .sizer button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-weight:700}
+
+section{padding-block:56px}
+.sec-head{display:grid;gap:8px;margin-bottom:28px;max-width:62ch}
+.sec-head h2{font-size:clamp(1.8rem,4.5vw,2.6rem)}
+.sec-head p{color:var(--muted)}
+
+/* settings panel */
+.listen{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:grid;gap:14px;margin-bottom:24px}
+.listen h3{font-size:1.15rem}
+.opts{display:grid;grid-template-columns:1fr;gap:14px 18px}
+@media (min-width:640px){.opts{grid-template-columns:1fr 1fr}}
+.opt{display:grid;gap:6px;min-width:0}
+.opt > span{font-size:.8rem;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.seg{display:flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px}
+.seg button{flex:1 1 0;min-width:0;border:0;background:transparent;border-radius:999px;padding:8px 6px;font-size:.88rem;font-weight:600;color:var(--muted);min-height:40px;white-space:nowrap;line-height:1.2;transition:background .2s,color .2s}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.toggles{display:flex;flex-wrap:wrap;gap:8px}
+.tog{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);font-size:.9rem;font-weight:600;background:var(--surface)}
+.tog input{accent-color:var(--gold)}
+.notice{border-radius:10px;padding:12px 14px;background:var(--gold-soft);font-size:.92rem}
+.notice strong{color:var(--gold)}
+
+/* timeline */
+.timeline{position:relative;display:grid;gap:40px}
+.timeline::before{content:"";position:absolute;left:21px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--gold-bright),var(--line))}
+.step{position:relative;padding-left:62px;display:grid;gap:16px}
+.step .num{position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--kiswa);color:#e2c06d;font-family:var(--f-body);font-weight:700;font-variant-numeric:tabular-nums;font-size:1.05rem;border:2px solid var(--gold-bright)}
+.step-head{display:grid;gap:4px}
+.step-head h3{font-size:clamp(1.4rem,3.6vw,1.9rem)}
+.step-head .place{color:var(--muted);font-size:.95rem}
+.step-body{color:var(--ink);max-width:65ch;display:grid;gap:10px}
+.tips{display:grid;gap:6px;padding:0;margin:0;list-style:none}
+.tips li{position:relative;padding-left:22px;color:var(--muted)}
+.tips li::before{content:"";position:absolute;left:4px;top:.62em;width:7px;height:7px;transform:rotate(45deg);background:var(--gold-bright)}
+.callout{border-left:3px solid var(--green);background:var(--green-soft);padding:10px 14px;border-radius:0 10px 10px 0;font-size:.95rem}
+.duas{display:grid;gap:16px}
+
+/* dua card */
+.dua{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:grid;gap:12px;min-width:0;transition:border-color .3s, box-shadow .3s}
+.dua.playing{border-color:var(--gold-bright);box-shadow:0 0 0 3px var(--hl)}
+.dua-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.dua h4{font-size:1.2rem}
+.when{font-size:.85rem;color:var(--muted)}
+.badge{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--gold-soft);color:var(--gold);white-space:nowrap}
+.badge.sunnah{background:var(--green-soft);color:var(--green)}
+.ar{font-size:var(--ar-size);line-height:2;text-align:right;color:var(--ink);display:grid;gap:2px}
+.ln{border-radius:8px;padding:0 6px;transition:background .25s,color .25s}
+.ln.on{background:var(--hl);color:var(--gold)}
+.ro{font-style:italic;color:var(--ink);font-size:calc(var(--ar-size) * .5);display:grid;gap:2px}
+.ro .ln.on{color:var(--gold)}
+.ur{font-size:calc(var(--ar-size) * .5);text-align:right;color:var(--ink)}
+.en{color:var(--muted)}
+.note{font-size:.88rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+body.hide-ro .ro, body.hide-ur .ur, body.hide-en .en{display:none}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.play{background:var(--kiswa);color:#e2c06d;border:1px solid var(--kiswa);border-radius:999px;padding:10px 18px;font-weight:700;display:inline-flex;gap:8px;align-items:center;min-height:46px}
+:root[data-theme="dark"] .play{border-color:var(--gold)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .play{border-color:var(--gold)}}
+.play[aria-pressed="true"]{background:#c9a54d;color:#141210;border-color:#c9a54d}
+.ghost{background:transparent;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-weight:600;font-size:.9rem;display:inline-flex;gap:6px;align-items:center;min-height:42px}
+.count{font-size:.9rem;color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums}
+.turn{font-size:.9rem;font-weight:700;color:var(--green);display:none}
+.dua.your-turn .turn{display:inline}
+.rec-badge{display:none}
+.noaud{display:none;font-size:.9rem;color:var(--muted)}
+.dua.no-audio:not(.has-rec) [data-act="play"]{display:none}
+.dua.no-audio:not(.has-rec) .noaud{display:inline}
+.src{font-size:.8rem;color:var(--muted)}
+.dua.has-rec .rec-badge{display:inline-flex}
+.recpanel{display:none;gap:8px;align-items:center;flex-wrap:wrap;background:var(--surface-2);border-radius:10px;padding:10px}
+.recpanel.open{display:flex}
+.recpanel small{color:var(--muted);flex-basis:100%}
+.recording-dot{width:10px;height:10px;border-radius:50%;background:var(--danger);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+
+/* reveal on scroll */
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+    .reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 35%}
+  }
+}
+@keyframes rise{from{opacity:.3;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+/* counter */
+.counter{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.counter svg{width:100%;max-width:340px;justify-self:center;display:block}
+.counter .side{display:grid;gap:14px}
+.big-btn{width:100%;min-height:76px;font-size:1.25rem;border-radius:18px;border:0;background:#c9a54d;color:#141210;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .1s}
+.big-btn:active{transform:scale(.97)}
+.big-btn:disabled{opacity:.5}
+.cstatus{font-size:1.05rem}
+.cstatus strong{font-family:var(--f-display);font-size:1.4rem;display:block}
+.crow{display:flex;gap:8px;flex-wrap:wrap}
+.seg.wide{max-width:320px}
+#kaabaRing .seg-arc{fill:none;stroke:var(--line);stroke-width:16;stroke-linecap:round;transition:stroke .4s}
+#kaabaRing .seg-arc.done{stroke:var(--gold-bright)}
+#kaabaRing .seg-arc.next{stroke:var(--gold);stroke-dasharray:4 6}
+#kaabaRing .walker{fill:var(--gold-bright)}
+#kaabaRing .cnum{font-family:var(--f-display);font-size:44px;fill:var(--ink)}
+#kaabaRing .csub{font-size:12px;fill:var(--muted);letter-spacing:.12em}
+
+/* places */
+.city{display:grid;gap:16px;margin-bottom:36px}
+.city h3{font-size:1.5rem;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.city h3 [lang="ar"]{color:var(--gold);font-size:1.6rem}
+.places{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.place-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:grid;gap:6px;align-content:start}
+.place-card .pa{font-family:var(--f-ar);color:var(--gold);font-size:1.4rem;line-height:1.4;direction:rtl;text-align:right}
+.place-card h4{font-size:1.1rem}
+.place-card p{color:var(--muted);font-size:.95rem}
+.madinah .place-card .pa{color:var(--green)}
+
+/* ihram + checklist */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:grid;gap:10px;align-content:start;min-width:0}
+.panel h3{font-size:1.25rem}
+.panel ul{margin:0;padding-left:20px;display:grid;gap:4px;color:var(--muted)}
+.check{display:grid;gap:4px}
+.check label{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer}
+.check label:hover{background:var(--surface-2)}
+.check input{width:22px;height:22px;accent-color:var(--gold);flex:none;margin-top:2px}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+.bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold-bright);width:0;transition:width .4s}
+
+footer{background:var(--kiswa);color:var(--kiswa-muted);padding-block:40px;text-align:center}
+footer .ar-f{font-family:var(--f-ar);color:#e2c06d;font-size:1.8rem;direction:rtl}
+footer a{color:#e2c06d}
+
+/* practice overlay */
+.practice{position:fixed;inset:0;z-index:100;background:var(--kiswa);color:#efe7d2;display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top,0px) + 12px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) max(16px,env(safe-area-inset-left,0px))}
+.practice[hidden]{display:none!important}
+.p-top{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.p-top .ttl{font-family:var(--f-display);color:#e2c06d;font-size:1.1rem;text-align:center;flex:1;min-width:0}
+.p-top small{display:block;color:#a9a28f;font-family:var(--f-body);font-size:.8rem}
+.icon-btn{width:48px;height:48px;border-radius:50%;border:1px solid rgba(226,192,109,.4);background:transparent;color:#efe7d2;display:grid;place-items:center;flex:none}
+.p-body{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:18px;padding-block:16px;text-align:center}
+.p-body>:first-child{margin-top:auto}
+.p-body{-webkit-mask-image:linear-gradient(transparent,#000 28px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(transparent,#000 28px,#000 calc(100% - 28px),transparent);padding-block:28px}
+.practice.long .p-ar{font-size:calc(var(--ar-size) * 1.05);line-height:1.9}
+.practice.long .p-ro{font-size:calc(var(--ar-size) * .5)}
+@media (max-width:720px){.practice.long .p-ar{font-size:calc(var(--ar-size) * .9)}}
+.p-body>:last-child{margin-bottom:auto}
+.p-ar{font-family:var(--f-ar);direction:rtl;font-size:calc(var(--ar-size) * 1.35);line-height:2;display:grid;gap:4px}
+.p-ar .ln.on,.p-ro .ln.on{background:rgba(226,192,109,.18);color:#f3d27e}
+.p-ro{font-style:italic;font-size:calc(var(--ar-size) * .62);color:#efe7d2;display:grid;gap:2px}
+.p-ur{font-family:var(--f-ur);direction:rtl;line-height:2.3;color:#cfc6ae;font-size:calc(var(--ar-size) * .55)}
+.p-en{color:#a9a28f}
+.p-ctrl{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;max-width:520px;margin:0 auto;width:100%}
+.p-play{width:96px;height:96px;border-radius:50%;border:0;background:#c9a54d;color:#141210;display:grid;place-items:center;justify-self:center;box-shadow:0 0 0 0 rgba(226,192,109,.6)}
+.p-play.on{animation:pulse 1.6s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 22px rgba(226,192,109,0)}100%{box-shadow:0 0 0 0 rgba(226,192,109,0)}}
+.p-meta{text-align:center;color:#a9a28f;font-size:.95rem;min-height:1.6em;margin-top:8px}
+.p-meta b{color:#f3d27e}
+.p-opts{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.p-opts .seg button{flex:0 0 auto;padding:8px 14px}
+.p-opts .seg{background:rgba(255,255,255,.07)}
+.p-opts .seg button{color:#a9a28f}
+.p-opts .seg button[aria-pressed="true"]{background:#2a2c2e;color:#f3d27e}
+
+@media (max-width:720px){
+  .hero .wrap{grid-template-columns:1fr;padding-block:36px 72px}
+  .ring{max-width:200px;grid-row:1}
+  .counter,.two{grid-template-columns:1fr}
+  .step{padding-left:52px}
+  .timeline::before{left:17px}
+  .step .num{width:36px;height:36px;font-size:1rem}
+  :root{--ar-size:1.85rem}
+}
+@media (prefers-reduced-motion: reduce){
+  .ring .spin,.p-play.on,.recording-dot{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<div class="progress" aria-hidden="true"></div>
+
+<header class="hero">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div>
+      <p class="eyebrow" style="color:#c9a54d">Umrah &amp; Ziyarat · Makkah · Madinah</p>
+      <p class="ar-title" lang="ar">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ</p>
+      <h1>Labbayk Umrah Companion</h1>
+      <p class="lede">Every dua from leaving home to cutting your hair, in Arabic, Roman Urdu, Urdu and English. Press play to listen, and set it to repeat until the words stay with you.</p>
+      <div class="trip">
+        <span class="chip"><strong>3 Nov</strong> Depart Pakistan</span>
+        <span class="chip"><strong>1 Dec</strong> Return flight</span>
+        <span class="chip" id="tripStatus">29 days</span>
+      </div>
+      <div class="hero-cta">
+        <button class="btn btn-gold" id="startPractice" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          Start practising duas
+        </button>
+        <a class="btn btn-ghost-dark" href="#counter">Tawaf &amp; Sa'i counter</a>
+      </div>
+    </div>
+    <div class="ring" aria-hidden="true">
+      <svg viewBox="0 0 300 300">
+        <defs><path id="circ" d="M150,150 m-118,0 a118,118 0 1,1 236,0 a118,118 0 1,1 -236,0"/></defs>
+        <g class="spin">
+          <text><textPath href="#circ" startOffset="0">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ ۞ لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ ۞ إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ ۞ لَا شَرِيكَ لَكَ ۞</textPath></text>
+        </g>
+        <circle cx="150" cy="150" r="96" fill="none" stroke="rgba(226,192,109,.25)"/>
+        <g transform="translate(150 150)">
+          <rect x="-44" y="-50" width="88" height="96" fill="#060707" stroke="rgba(226,192,109,.35)"/>
+          <rect x="-44" y="-30" width="88" height="10" fill="#c9a54d"/>
+          <rect x="16" y="-6" width="16" height="40" fill="none" stroke="#c9a54d" stroke-width="1.5"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <a href="#journey">Umrah steps</a>
+    <a href="#more-duas">More duas</a>
+    <a href="#counter">Counter</a>
+    <a href="#places">Holy places</a>
+    <a href="#prepare">Ihram &amp; checklist</a>
+    <div class="sizer" role="group" aria-label="Text size">
+      <button type="button" id="smaller" aria-label="Smaller text">A−</button>
+      <button type="button" id="bigger" aria-label="Bigger text">A+</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section id="journey">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Step by step</p>
+        <h2>The Umrah, in order</h2>
+        <p>Nine steps from your home in Pakistan to the end of Sa'i. Under each step are the duas for that moment. Nothing beyond the Sunnah duas is compulsory. Between them, speak to Allah in your own words, in any language.</p>
+      </div>
+
+      <div class="listen" aria-labelledby="listenH">
+        <h3 id="listenH">Listening settings</h3>
+        <div class="opts">
+          <div class="opt"><span>Speed</span><div class="seg" data-setting="rate">
+            <button type="button" data-v="0.55">Slow</button><button type="button" data-v="0.8">Normal</button></div></div>
+          <div class="opt"><span>Repeat</span><div class="seg" data-setting="repeat">
+            <button type="button" data-v="1">1×</button><button type="button" data-v="3">3×</button><button type="button" data-v="7">7×</button><button type="button" data-v="0">Non-stop</button></div></div>
+          <div class="opt"><span>Pause for her to repeat</span><div class="seg" data-setting="gap">
+            <button type="button" data-v="0">Off</button><button type="button" data-v="3">3 sec</button><button type="button" data-v="turn">Her turn</button></div></div>
+          <div class="opt"><span>Read</span><div class="seg" data-setting="mode">
+            <button type="button" data-v="line">Line by line</button><button type="button" data-v="whole">Whole dua</button></div></div>
+        </div>
+        <div class="toggles">
+          <label class="tog"><input type="checkbox" id="showRo" checked> Roman Urdu</label>
+          <label class="tog"><input type="checkbox" id="showUr" checked> Urdu</label>
+          <label class="tog"><input type="checkbox" id="showEn" checked> English</label>
+          <label class="tog"><input type="checkbox" id="useRec" checked> Use recorded voice when added</label>
+        </div>
+        <p class="notice" id="voiceNote"><strong>Tip for learning:</strong> choose <b>Slow</b>, <b>Line by line</b> and <b>Her turn</b>. The reciter says one line, then the app waits while your mother says it back, then moves to the next line.<br><span class="src">Recitations: Quranic duas by Sheikh Mishary Rashid Alafasy; Sunnah duas from the Hisn al-Muslim audio collection. Real voices, saved for offline use.</span></p>
+      </div>
+
+      <div class="timeline" id="steps"></div>
+    </div>
+  </section>
+
+  <section id="more-duas" style="background:var(--surface-2)">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Keep these with you</p>
+        <h2>Duas for Tawaf, Sa'i and every day</h2>
+        <p>Short Quranic and Sunnah duas to recite during the rounds, after Salah, and through the whole month.</p>
+      </div>
+      <div class="duas" id="generalDuas"></div>
+    </div>
+  </section>
+
+  <section id="counter">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">In the Haram</p>
+        <h2>Round counter</h2>
+        <p>Tap the gold button each time you reach the Black Stone (Tawaf) or arrive at Safa or Marwah (Sa'i). It remembers the count if the screen locks.</p>
+      </div>
+      <div class="counter">
+        <svg id="kaabaRing" viewBox="0 0 260 260" role="img" aria-label="Round progress"></svg>
+        <div class="side">
+          <div class="seg wide" id="cMode">
+            <button type="button" data-v="tawaf" aria-pressed="true">Tawaf</button>
+            <button type="button" data-v="sai" aria-pressed="false">Sa'i</button>
+          </div>
+          <p class="cstatus" id="cStatus" aria-live="polite"></p>
+          <button class="big-btn" id="cAdd" type="button"></button>
+          <div class="crow">
+            <button class="ghost" id="cUndo" type="button">Undo last</button>
+            <button class="ghost" id="cReset" type="button">Start again</button>
+            <button class="ghost" id="cDua" type="button">Play Rabbana atina</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="places" style="background:var(--surface-2)">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Ziyarat</p>
+        <h2>Holy places to know and visit</h2>
+        <p>With a month in Saudi Arabia, you have time for both cities. Rawdah visits need a permit booked in the Nusuk app.</p>
+      </div>
+      <div id="placeList"></div>
+    </div>
+  </section>
+
+  <section id="prepare">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Before tomorrow</p>
+        <h2>Ihram rules and checklist</h2>
+      </div>
+      <div class="two">
+        <div class="panel">
+          <h3>While in Ihram, avoid</h3>
+          <ul>
+            <li>Perfume or scented soap, on body or clothes</li>
+            <li>Cutting hair or nails</li>
+            <li>Men: stitched clothing, covering the head</li>
+            <li>Women: niqab and gloves (cover the face with a loose cloth if needed)</li>
+            <li>Arguing, bad words, and marital relations</li>
+            <li>Hunting or harming animals</li>
+          </ul>
+          <h3 style="margin-top:8px">Flying from Pakistan</h3>
+          <p style="color:var(--muted)">If you fly straight to Jeddah, you cross the Miqat in the air. Wear Ihram at home or at the airport, pray 2 rak'ahs, and make the niyyah when the crew announces the Miqat (about 30 minutes before landing). If you go to Madinah first, wear Ihram later at Dhul Hulaifah (Masjid Shajarah) on the way to Makkah.</p>
+        </div>
+        <div class="panel">
+          <h3>Preparation checklist</h3>
+          <div class="bar" aria-hidden="true"><i id="checkBar"></i></div>
+          <p id="checkCount" style="color:var(--muted);font-size:.9rem"></p>
+          <div class="check" id="checklist"></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:16px">
+        <h3>Keep these on your phone</h3>
+        <p style="color:var(--muted)"><a href="https://umrah.nusuk.sa/Journey" target="_blank" rel="noopener">Nusuk: official Umrah steps and permits</a> · <a href="https://my.gov.sa/en/services/2674798" target="_blank" rel="noopener">Digital Mutawwif: 170+ duas with audio</a></p>
+        <p style="color:var(--muted)">Wheelchairs and electric carts are available inside the Haram for Tawaf and Sa'i, which can help your mother on busy days.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap" style="display:grid;gap:10px">
+    <p class="ar-f">تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ</p>
+    <p>May Allah accept your Umrah, forgive your sins and answer your duas. Ameen.</p>
+  </div>
+</footer>
+
+<!-- practice mode -->
+<div class="practice" id="practice" hidden role="dialog" aria-modal="true" aria-label="Practice duas">
+  <div class="p-top">
+    <button class="icon-btn" id="pClose" type="button" aria-label="Close practice">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="ttl" id="pTitle"></div>
+    <span style="width:48px"></span>
+  </div>
+  <div class="p-body" id="pBody">
+    <div class="p-ar" lang="ar" id="pAr"></div>
+    <div class="p-ro" id="pRo"></div>
+    <p class="p-ur" lang="ur" id="pUr"></p>
+    <p class="p-en" id="pEn"></p>
+  </div>
+  <div>
+    <div class="p-ctrl">
+      <button class="icon-btn" id="pPrev" type="button" aria-label="Previous dua">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button class="p-play" id="pPlay" type="button" aria-label="Play">
+        <svg id="pPlayIcon" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="icon-btn" id="pNext" type="button" aria-label="Next dua">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+    <p class="p-meta" id="pMeta" aria-live="polite">Press play to listen</p>
+    <div class="p-opts">
+      <div class="seg" data-setting="rate"><button type="button" data-v="0.55">Slow</button><button type="button" data-v="0.8">Normal</button></div>
+      <div class="seg" data-setting="repeat"><button type="button" data-v="1">1×</button><button type="button" data-v="3">3×</button><button type="button" data-v="0">Non-stop</button></div>
+      <div class="seg" data-setting="gap"><button type="button" data-v="0">No pause</button><button type="button" data-v="turn">Her turn</button></div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fileIn" accept="audio/*" capture hidden>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- content ---------------- */
+const D = [
+ {id:"travel",title:"Leaving home",when:"When stepping out of the house",tag:"Sunnah",
+  lines:[{ar:"بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ",ro:"Bismillahi, tawakkaltu 'alallah,"},{ar:"وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",ro:"wa la hawla wa la quwwata illa billah."}],
+  ur:"اللہ کے نام سے، میں نے اللہ پر بھروسہ کیا، اور اللہ کے سوا نہ کوئی طاقت ہے نہ قوت۔",
+  en:"In the name of Allah, I put my trust in Allah. There is no power or strength except through Allah."},
+ {id:"ride",title:"Dua of travel (riding)",when:"When you sit in the car, bus or plane",tag:"Sunnah",
+  lines:[{ar:"بِسْمِ اللَّهِ، وَالْحَمْدُ لِلَّهِ",ro:"Bismillah, wal-hamdu lillah,"},{ar:"سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ",ro:"Subhanalladhi sakhkhara lana hadha wa ma kunna lahu muqrineen,"},{ar:"وَإِنَّا إِلَىٰ رَبِّنَا لَمُنْقَلِبُونَ",ro:"wa inna ila Rabbina lamunqaliboon."},{ar:"الْحَمْدُ لِلَّهِ، الْحَمْدُ لِلَّهِ، الْحَمْدُ لِلَّهِ",ro:"Alhamdulillah, alhamdulillah, alhamdulillah,"},{ar:"اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ",ro:"Allahu Akbar, Allahu Akbar, Allahu Akbar,"},{ar:"سُبْحَانَكَ اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي فَاغْفِرْ لِي",ro:"Subhanaka Allahumma inni zalamtu nafsi faghfir li,"},{ar:"فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",ro:"fa innahu la yaghfirudh-dhunuba illa ant."}],
+  ur:"اللہ کے نام سے، اور تمام تعریف اللہ کے لیے ہے۔ پاک ہے وہ ذات جس نے اسے ہمارے بس میں کر دیا، ورنہ ہم اسے قابو میں نہ لا سکتے تھے، اور بے شک ہم اپنے رب کی طرف لوٹنے والے ہیں۔ تمام تعریف اللہ کے لیے ہے (تین بار)، اللہ سب سے بڑا ہے (تین بار)۔ اے اللہ! تو پاک ہے، میں نے اپنی جان پر ظلم کیا، مجھے بخش دے، کیونکہ تیرے سوا کوئی گناہوں کو نہیں بخشتا۔",
+  en:"In the name of Allah, and all praise is for Allah. Glory be to the One who placed this at our service, for we could never have done it ourselves, and to our Lord we will surely return. All praise is for Allah (3 times). Allah is the Greatest (3 times). Glory be to You, O Allah. I have wronged myself, so forgive me, for none forgives sins except You."},
+ {id:"niyyah",title:"Niyyah for Umrah",when:"At the Miqat, after wearing Ihram",tag:"Sunnah",
+  lines:[{ar:"لَبَّيْكَ اللَّهُمَّ عُمْرَةً",ro:"Labbayka Allahumma 'Umratan."}],
+  ur:"اے اللہ! میں عمرہ کے لیے حاضر ہوں۔",
+  en:"O Allah, here I am to perform Umrah.",
+  note:"Say it once. From this moment you are in Ihram."},
+ {id:"talbiyah",title:"Talbiyah",when:"From the Miqat until Tawaf begins, again and again",tag:"Sunnah",
+  lines:[{ar:"لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ",ro:"Labbayk Allahumma labbayk,"},{ar:"لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ",ro:"Labbayka la shareeka laka labbayk,"},{ar:"إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ",ro:"Innal hamda wan-ni'mata laka wal-mulk,"},{ar:"لَا شَرِيكَ لَكَ",ro:"La shareeka lak."}],
+  ur:"میں حاضر ہوں، اے اللہ میں حاضر ہوں۔ میں حاضر ہوں، تیرا کوئی شریک نہیں، میں حاضر ہوں۔ بے شک تمام تعریف، نعمت اور بادشاہی تیرے ہی لیے ہے، تیرا کوئی شریک نہیں۔",
+  en:"Here I am, O Allah, here I am. You have no partner. All praise, blessings and sovereignty belong to You. You have no partner.",
+  note:"Men say it aloud; women say it softly, loud enough to hear themselves. Stop the Talbiyah when Tawaf begins."},
+ {id:"enter",title:"Entering the Masjid",when:"Step in with the right foot",tag:"Sunnah",
+  lines:[{ar:"أَعُوذُ بِاللَّهِ الْعَظِيمِ، وَبِوَجْهِهِ الْكَرِيمِ",ro:"A'udhu billahil-'Azeem, wa bi-wajhihil-Kareem,"},{ar:"وَسُلْطَانِهِ الْقَدِيمِ، مِنَ الشَّيْطَانِ الرَّجِيمِ",ro:"wa sultanihil-qadeem, minash-shaytanir-rajeem."},{ar:"بِسْمِ اللَّهِ، وَالصَّلَاةُ وَالسَّلَامُ عَلَىٰ رَسُولِ اللَّهِ",ro:"Bismillah, wassalatu wassalamu 'ala Rasulillah."},{ar:"اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",ro:"Allahummaftah li abwaba rahmatik."}],
+  ur:"میں عظمت والے اللہ کی، اس کے کریم چہرے کی اور اس کی ازلی بادشاہی کی پناہ مانگتا ہوں مردود شیطان سے۔ اللہ کے نام سے، اور درود و سلام ہو اللہ کے رسول پر۔ اے اللہ! میرے لیے اپنی رحمت کے دروازے کھول دے۔",
+  en:"I seek refuge in Allah the Almighty, in His noble Face and His eternal authority, from the accursed devil. In the name of Allah, peace and blessings upon the Messenger of Allah. O Allah, open the doors of Your mercy for me."},
+ {id:"exit",title:"Leaving the Masjid",when:"Step out with the left foot",tag:"Sunnah",
+  lines:[{ar:"بِسْمِ اللَّهِ، وَالصَّلَاةُ وَالسَّلَامُ عَلَىٰ رَسُولِ اللَّهِ",ro:"Bismillah, wassalatu wassalamu 'ala Rasulillah."},{ar:"اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",ro:"Allahumma inni as'aluka min fadlik."},{ar:"اللَّهُمَّ اعْصِمْنِي مِنَ الشَّيْطَانِ الرَّجِيمِ",ro:"Allahumma'simni minash-shaytanir-rajeem."}],
+  ur:"اللہ کے نام سے، اور درود و سلام ہو اللہ کے رسول پر۔ اے اللہ! میں تجھ سے تیرا فضل مانگتا ہوں۔ اے اللہ! مجھے مردود شیطان سے محفوظ رکھ۔",
+  en:"In the name of Allah, peace and blessings upon the Messenger of Allah. O Allah, I ask You of Your bounty. O Allah, protect me from the accursed devil."},
+ {id:"kaaba",title:"First sight of the Kaaba",when:"When your eyes first fall on the Kaaba",tag:"Personal dua",
+  lines:[{ar:"اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ",ro:"Allahu Akbar, Allahu Akbar, Allahu Akbar."},{ar:"لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ",ro:"La ilaha illallahu wahdah."}],
+  ur:"اللہ سب سے بڑا ہے (تین بار)۔ اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے۔",
+  en:"Allah is the Greatest (3 times). There is no god but Allah alone.",
+  note:"There is no fixed dua here. Stop for a moment and ask Allah for forgiveness, guidance, acceptance of your Umrah and whatever is in your heart."},
+ {id:"tawafStart",title:"At the Black Stone",when:"Start of every round, facing Hajar al-Aswad",tag:"Sunnah",
+  lines:[{ar:"بِسْمِ اللَّهِ، اللَّهُ أَكْبَرُ",ro:"Bismillahi, Allahu Akbar."}],
+  ur:"اللہ کے نام سے، اللہ سب سے بڑا ہے۔",
+  en:"In the name of Allah, Allah is the Greatest.",
+  note:"Raise your right hand towards the Black Stone. On the following rounds, saying Allahu Akbar is enough."},
+ {id:"rabbana",title:"Rabbana atina",when:"Between Rukn al-Yamani and the Black Stone, every round",tag:"Sunnah",
+  lines:[{ar:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً",ro:"Rabbana atina fid-dunya hasanatan,"},{ar:"وَفِي الْآخِرَةِ حَسَنَةً",ro:"wa fil-akhirati hasanatan,"},{ar:"وَقِنَا عَذَابَ النَّارِ",ro:"wa qina 'adhaban-nar."}],
+  ur:"اے ہمارے رب! ہمیں دنیا میں بھلائی دے اور آخرت میں بھی بھلائی دے، اور ہمیں آگ کے عذاب سے بچا۔",
+  en:"Our Lord, grant us good in this world and good in the Hereafter, and protect us from the punishment of the Fire.",
+  note:"The most important dua to memorise for Tawaf."},
+ {id:"maqam",title:"Going to Maqam Ibrahim",when:"After the seventh round, on the way to pray",tag:"Sunnah",
+  lines:[{ar:"وَاتَّخِذُوا مِن مَّقَامِ إِبْرَاهِيمَ مُصَلًّى",ro:"Wattakhidhu min maqami Ibrahima musalla."}],
+  ur:"اور مقامِ ابراہیم کو نماز کی جگہ بناؤ۔",
+  en:"And take the standing place of Ibrahim as a place of prayer.",
+  note:"Then pray 2 rak'ahs: Surah al-Kafirun in the first, Surah al-Ikhlas in the second. If it is crowded, pray anywhere in the Haram."},
+ {id:"zamzam",title:"Drinking Zamzam",when:"After the 2 rak'ahs, before Sa'i",tag:"Sunnah",
+  lines:[{ar:"اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا",ro:"Allahumma inni as'aluka 'ilman nafi'an,"},{ar:"وَرِزْقًا طَيِّبًا",ro:"wa rizqan tayyiban,"},{ar:"وَعَمَلًا مُتَقَبَّلًا",ro:"wa 'amalan mutaqabbala."}],
+  ur:"اے اللہ! میں تجھ سے نفع دینے والا علم، پاکیزہ رزق اور قبول ہونے والا عمل مانگتا ہوں۔",
+  en:"O Allah, I ask You for beneficial knowledge, good and pure provision, and deeds that are accepted.",
+  note:"An authentic dua from the Sunnah. There is no fixed Zamzam dua: drink facing the Kaaba and ask Allah for anything you need."},
+ {id:"safaVerse",title:"Approaching Safa",when:"Only once, before the first trip",tag:"Sunnah",
+  lines:[{ar:"إِنَّ الصَّفَا وَالْمَرْوَةَ مِن شَعَائِرِ اللَّهِ",ro:"Innas-Safa wal-Marwata min sha'a'irillah."},{ar:"أَبْدَأُ بِمَا بَدَأَ اللَّهُ بِهِ",ro:"Abda'u bima bada'allahu bih."}],
+  ur:"بے شک صفا اور مروہ اللہ کی نشانیوں میں سے ہیں۔ میں وہیں سے شروع کرتا ہوں جہاں سے اللہ نے شروع کیا۔",
+  en:"Indeed Safa and Marwah are among the symbols of Allah. I begin with what Allah began with."},
+ {id:"safaDhikr",title:"On Safa and Marwah",when:"On top of each hill, facing the Kaaba, with hands raised",tag:"Sunnah",
+  lines:[{ar:"اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ",ro:"Allahu Akbar, Allahu Akbar, Allahu Akbar."},{ar:"لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",ro:"La ilaha illallahu wahdahu la shareeka lah,"},{ar:"لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ",ro:"lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadeer."},{ar:"لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ، أَنْجَزَ وَعْدَهُ",ro:"La ilaha illallahu wahdah, anjaza wa'dah,"},{ar:"وَنَصَرَ عَبْدَهُ، وَهَزَمَ الْأَحْزَابَ وَحْدَهُ",ro:"wa nasara 'abdah, wa hazamal-ahzaba wahdah."}],
+  ur:"اللہ سب سے بڑا ہے (تین بار)۔ اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس کا کوئی شریک نہیں، اسی کی بادشاہی ہے اور اسی کے لیے تمام تعریف ہے، اور وہ ہر چیز پر قادر ہے۔ اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس نے اپنا وعدہ پورا کیا، اپنے بندے کی مدد کی، اور اکیلے ہی تمام لشکروں کو شکست دی۔",
+  en:"Allah is the Greatest (3 times). There is no god but Allah alone, without partner. His is the dominion and His is all praise, and He has power over everything. There is no god but Allah alone. He fulfilled His promise, helped His servant and alone defeated the confederates.",
+  note:"Say it three times, making your own dua in between. Repeat it on Marwah and at every arrival."},
+ /* general */
+ {id:"durood",title:"Durood Ibrahimi",when:"Anytime, especially during Sa'i (the same as in Salah)",tag:"Sunnah",g:1,
+  lines:[{ar:"اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ",ro:"Allahumma salli 'ala Muhammadin wa 'ala ali Muhammad,"},{ar:"كَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ",ro:"kama sallayta 'ala Ibrahima wa 'ala ali Ibrahim,"},{ar:"إِنَّكَ حَمِيدٌ مَجِيدٌ",ro:"innaka Hamidun Majid."},{ar:"اللَّهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ",ro:"Allahumma barik 'ala Muhammadin wa 'ala ali Muhammad,"},{ar:"كَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ",ro:"kama barakta 'ala Ibrahima wa 'ala ali Ibrahim,"},{ar:"إِنَّكَ حَمِيدٌ مَجِيدٌ",ro:"innaka Hamidun Majid."}],
+  ur:"اے اللہ! محمد ﷺ اور آلِ محمد پر رحمت نازل فرما، جیسے تو نے ابراہیمؑ اور آلِ ابراہیم پر رحمت نازل فرمائی، بے شک تو تعریف والا، بزرگی والا ہے۔ اے اللہ! محمد ﷺ اور آلِ محمد پر برکت نازل فرما، جیسے تو نے ابراہیمؑ اور آلِ ابراہیم پر برکت نازل فرمائی، بے شک تو تعریف والا، بزرگی والا ہے۔",
+  en:"O Allah, send prayers upon Muhammad and the family of Muhammad, as You sent prayers upon Ibrahim and the family of Ibrahim; You are Praiseworthy, Glorious. O Allah, bless Muhammad and the family of Muhammad, as You blessed Ibrahim and the family of Ibrahim; You are Praiseworthy, Glorious."},
+ {id:"istighfar",title:"Istighfar",when:"Anytime",tag:"Sunnah",g:1,
+  lines:[{ar:"أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ",ro:"Astaghfirullahal-'Azeem,"},{ar:"الَّذِي لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ",ro:"alladhi la ilaha illa Huwal-Hayyul-Qayyum,"},{ar:"وَأَتُوبُ إِلَيْهِ",ro:"wa atubu ilayh."}],
+  ur:"میں عظمت والے اللہ سے بخشش مانگتا ہوں، جس کے سوا کوئی معبود نہیں، وہ ہمیشہ زندہ اور سب کو قائم رکھنے والا ہے، اور میں اسی کی طرف توبہ کرتا ہوں۔",
+  en:"I seek forgiveness from Allah the Almighty; there is no god but He, the Ever-Living, the Sustainer of all; and I turn to Him in repentance."},
+ {id:"forgive",title:"For forgiveness",when:"During Tawaf, Sa'i, and between the two sajdahs",tag:"Sunnah",g:1,
+  lines:[{ar:"رَبِّ اغْفِرْ لِي، رَبِّ اغْفِرْ لِي",ro:"Rabbighfir li, Rabbighfir li."}],
+  ur:"اے میرے رب! مجھے بخش دے، اے میرے رب! مجھے بخش دے۔",en:"My Lord, forgive me. My Lord, forgive me."},
+ {id:"parents",title:"For parents",when:"During Tawaf, Sa'i, after Salah",tag:"Quran",g:1,
+  lines:[{ar:"رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",ro:"Rabbirhamhuma kama rabbayani sagheera."}],
+  note:"The recitation is from the Quran (17:24) and begins with \"wa qul\" (and say). In your dua, start from Rabbi.",
+  ur:"اے میرے رب! ان دونوں پر رحم فرما جیسے انہوں نے بچپن میں میری پرورش کی۔",en:"My Lord, have mercy on them as they raised me when I was small."},
+ {id:"family",title:"For family and children",when:"During Tawaf, Sa'i, after Salah",tag:"Quran",g:1,
+  lines:[{ar:"رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ",ro:"Rabbana hab lana min azwajina wa dhurriyyatina qurrata a'yunin,"},{ar:"وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا",ro:"waj'alna lil-muttaqina imama."}],
+  ur:"اے ہمارے رب! ہمیں ہمارے شریکِ حیات اور اولاد سے آنکھوں کی ٹھنڈک عطا فرما، اور ہمیں پرہیزگاروں کا پیشوا بنا۔",en:"Our Lord, grant us comfort in our spouses and children, and make us leaders of the righteous."},
+ {id:"ease",title:"For ease",when:"When tired or anxious",tag:"Quran",g:1,
+  lines:[{ar:"رَبِّ اشْرَحْ لِي صَدْرِي",ro:"Rabbishrah li sadri,"},{ar:"وَيَسِّرْ لِي أَمْرِي",ro:"wa yassir li amri."}],
+  ur:"اے میرے رب! میرا سینہ کھول دے اور میرا کام آسان کر دے۔",en:"My Lord, open my heart and make my task easy."},
+ {id:"knowledge",title:"For knowledge",when:"Anytime",tag:"Quran",g:1,
+  lines:[{ar:"رَبِّ زِدْنِي عِلْمًا",ro:"Rabbi zidni 'ilma."}],
+  note:"The recitation is from the Quran (20:114) and begins with \"wa qul\" (and say). In your dua, start from Rabbi.",
+  ur:"اے میرے رب! میرے علم میں اضافہ فرما۔",en:"My Lord, increase me in knowledge."},
+ {id:"hasbun",title:"For protection",when:"In crowds, or when worried",tag:"Quran",g:1,
+  lines:[{ar:"حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",ro:"Hasbunallahu wa ni'mal wakeel."}],
+  ur:"ہمیں اللہ کافی ہے اور وہ بہترین کارساز ہے۔",en:"Allah is enough for us, and He is the best to rely on."},
+ /* madinah */
+ {id:"salam",title:"Salam to the Prophet ﷺ",when:"In Masjid an-Nabawi, passing the blessed grave",tag:"Sunnah",m:1,
+  lines:[{ar:"السَّلَامُ عَلَيْكَ يَا رَسُولَ اللَّهِ",ro:"Assalamu 'alaika ya Rasulallah."},{ar:"السَّلَامُ عَلَيْكَ يَا أَبَا بَكْرٍ",ro:"Assalamu 'alaika ya Aba Bakr."},{ar:"السَّلَامُ عَلَيْكَ يَا عُمَرُ",ro:"Assalamu 'alaika ya 'Umar."}],
+  ur:"اے اللہ کے رسول! آپ پر سلام ہو۔ اے ابو بکر! آپ پر سلام ہو۔ اے عمر! آپ پر سلام ہو۔",en:"Peace be upon you, O Messenger of Allah. Peace be upon you, O Abu Bakr. Peace be upon you, O Umar."},
+ {id:"baqi",title:"Visiting Jannat al-Baqi",when:"At the graves of Baqi or Uhud",tag:"Sunnah",m:1,
+  lines:[{ar:"السَّلَامُ عَلَيْكُمْ أَهْلَ الدِّيَارِ، مِنَ الْمُؤْمِنِينَ وَالْمُسْلِمِينَ",ro:"Assalamu 'alaikum ahlad-diyar, minal-mu'mineena wal-muslimeen,"},{ar:"وَإِنَّا إِنْ شَاءَ اللَّهُ بِكُمْ لَاحِقُونَ",ro:"wa inna in sha Allahu bikum lahiqoon,"},{ar:"وَيَرْحَمُ اللَّهُ الْمُسْتَقْدِمِينَ مِنَّا وَالْمُسْتَأْخِرِينَ",ro:"wa yarhamullahul-mustaqdimeena minna wal-musta'khireen,"},{ar:"أَسْأَلُ اللَّهَ لَنَا وَلَكُمُ الْعَافِيَةَ",ro:"as'alullaha lana wa lakumul-'afiyah."}],
+  ur:"اے اس بستی کے مومنو اور مسلمانو! تم پر سلام ہو، اور ان شاء اللہ ہم بھی تم سے ملنے والے ہیں۔ اللہ ہم میں سے پہلے جانے والوں اور بعد میں آنے والوں پر رحم فرمائے۔ میں اللہ سے اپنے اور تمہارے لیے عافیت مانگتا ہوں۔",
+  en:"Peace be upon you, believers and Muslims of this resting place. If Allah wills, we will join you. May Allah have mercy on those of us who went before and those who come later. I ask Allah for well-being for us and for you."}
+];
+const byId = Object.fromEntries(D.map(d=>[d.id,d]));
+/* real recitations available for each dua (n = number of lines); see scripts/make-audio.py */
+const AUDIO = {"travel":{"n":2},"ride":{"n":7},"talbiyah":{"n":4},"enter":{"n":4},"exit":{"n":3},"kaaba":{"n":2},"tawafStart":{"n":1},"rabbana":{"n":3},"maqam":{"n":1},"zamzam":{"n":3},"safaVerse":{"n":2},"safaDhikr":{"n":5},"durood":{"n":6},"istighfar":{"n":3},"forgive":{"n":1},"parents":{"n":1},"family":{"n":1},"ease":{"n":2},"knowledge":{"n":1},"hasbun":{"n":1},"baqi":{"n":4}};
+
+const STEPS = [
+ {t:"Before leaving home",p:"Your home in Pakistan · 3 November",
+  b:"Pray two rak'ahs if you wish. Ask Allah for ease, forgiveness and acceptance. Ask family to forgive you and settle any debts.",
+  tips:["Pack Ihram, unscented soap, a small bag for shoes, and comfortable sandals","Keep passport, visa and Nusuk app ready"],duas:["travel","ride"]},
+ {t:"At the Miqat: entering Ihram",p:"On the plane before Jeddah, or Dhul Hulaifah from Madinah",
+  b:"Take ghusl, wear Ihram (men: two white sheets; women: modest normal clothes), then make the niyyah and begin the Talbiyah.",
+  call:"From Pakistan the Miqat comes during the flight. Wear Ihram before boarding and make the niyyah when the crew announces the Miqat.",duas:["niyyah","talbiyah"]},
+ {t:"Entering Masjid al-Haram",p:"Makkah · any gate, King Abdulaziz Gate is closest to the Kaaba",
+  b:"Make wudu, enter with the right foot and recite the entry dua.",tips:["Note your gate number so you can find each other later"],duas:["enter","exit"]},
+ {t:"First sight of the Kaaba",p:"Mataf, the open courtyard around the Kaaba",
+  b:"A moment for your own dua. Speak to Allah from the heart.",duas:["kaaba"]},
+ {t:"Tawaf: seven rounds",p:"Around the Kaaba, keeping it on your left",
+  b:"Start at the line of the Black Stone (a green light on the wall marks it). Walk anticlockwise for seven rounds. Wudu is required.",
+  tips:["Men: right shoulder uncovered (idtiba) for this Tawaf; walk briskly in the first three rounds if possible","There is no fixed dua for each round. Recite Quran, durood, istighfar or your own duas","Use the round counter below so you don't lose count"],duas:["tawafStart","rabbana"]},
+ {t:"Two rak'ahs at Maqam Ibrahim",p:"Behind Maqam Ibrahim, or anywhere in the Haram",
+  b:"Cover both shoulders again, then pray two rak'ahs without blocking anyone.",duas:["maqam"]},
+ {t:"Drink Zamzam",p:"Zamzam coolers throughout the Haram",b:"Drink and ask Allah for whatever you need.",duas:["zamzam"]},
+ {t:"Sa'i between Safa and Marwah",p:"The Mas'a gallery, first floor or roof if crowded",
+  b:"Seven trips: Safa to Marwah is one, Marwah back to Safa is two. You finish at Marwah.",
+  tips:["Men jog lightly between the green lights; women walk normally","No fixed dua for each trip; durood, istighfar and personal duas","Electric carts and wheelchairs are available for elderly pilgrims"],duas:["safaVerse","safaDhikr"]},
+ {t:"Halq or Taqsir: finishing Umrah",p:"Barber shops outside Marwah gate",
+  b:"Men shave the head (best) or shorten hair evenly all over. Women cut about 2 cm (a fingertip's length) from the end of their hair. Your Umrah is complete and Ihram ends.",
+  call:"Umrah Mubarak! There is no special dua for cutting hair. Thank Allah and make dua for your family.",duas:[]}
+];
+
+const PLACES = [
+ {city:"Makkah",ar:"مَكَّةُ الْمُكَرَّمَةُ",cls:"",items:[
+  ["Hajar al-Aswad","الْحَجَرُ الْأَسْوَدُ","The Black Stone. Start and end point of every Tawaf round. Say Allahu Akbar when you face it."],
+  ["Rukn al-Yamani","الرُّكْنُ الْيَمَانِيُّ","The corner before the Black Stone. Recite Rabbana atina between here and the Black Stone."],
+  ["Multazam","الْمُلْتَزَمُ","Between the Kaaba door and the Black Stone. A place for heartfelt dua if you can reach it without pushing."],
+  ["Maqam Ibrahim","مَقَامُ إِبْرَاهِيمَ","The footprint of Prophet Ibrahim. Pray two rak'ahs behind it after Tawaf."],
+  ["Hijr Ismail","حِجْرُ إِسْمَاعِيلَ","The semi-circular wall beside the Kaaba. Tawaf must go outside it. Praying inside it is like praying inside the Kaaba."],
+  ["Safa and Marwah","الصَّفَا وَالْمَرْوَةُ","Where Hajar ran searching for water for Ismail. Seven trips of Sa'i."],
+  ["Jabal al-Nour (Cave Hira)","جَبَلُ النُّورِ","Where the first verses of the Quran were revealed. A steep climb; go early morning."],
+  ["Jabal Thawr","جَبَلُ ثَوْرٍ","The cave where the Prophet ﷺ and Abu Bakr hid during the Hijrah."],
+  ["Mina, Arafat, Muzdalifah","مِنَى · عَرَفَات · مُزْدَلِفَة","The Hajj sites, a short drive away. Jabal al-Rahmah stands in Arafat."],
+  ["Masjid Aisha (Tan'im)","مَسْجِدُ عَائِشَةَ","The nearest Miqat if you want to do another Umrah while staying in Makkah."]]},
+ {city:"Madinah",ar:"الْمَدِينَةُ الْمُنَوَّرَةُ",cls:"madinah",items:[
+  ["Masjid an-Nabawi","الْمَسْجِدُ النَّبَوِيُّ","The Prophet's ﷺ mosque. One prayer here is better than a thousand elsewhere, except Masjid al-Haram."],
+  ["Rawdah","الرَّوْضَةُ الشَّرِيفَةُ","A garden of Paradise between the Prophet's ﷺ house and minbar. Book a permit in Nusuk; women have separate times."],
+  ["Jannat al-Baqi","جَنَّةُ الْبَقِيعِ","Resting place of many Companions and family of the Prophet ﷺ. Visiting hours are usually after Fajr and Asr, for men."],
+  ["Masjid Quba","مَسْجِدُ قُبَاءٍ","The first mosque in Islam. Praying two rak'ahs here carries the reward of an Umrah."],
+  ["Mount Uhud","جَبَلُ أُحُدٍ","Site of the Battle of Uhud. Greet the martyrs, including Hamzah (RA)."],
+  ["Masjid al-Qiblatayn","مَسْجِدُ الْقِبْلَتَيْنِ","Where the qiblah was changed from Jerusalem to Makkah."]]}
+];
+
+const CHECK = ["Learn the Talbiyah","Learn Rabbana atina","Learn the Safa and Marwah dhikr","Learn the masjid entry dua","Understand the seven Tawaf rounds","Understand the seven Sa'i trips","Know the rules of Ihram","Prepare duas for parents and family","Write your personal duas","Pack comfortable footwear, medicines and Ihram"];
+
+/* ---------------- storage helpers ---------------- */
+const ls = {
+  get(k,d){try{const v=localStorage.getItem("umrah:"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("umrah:"+k,JSON.stringify(v))}catch(e){}}
+};
+const S = Object.assign({rate:"0.55",repeat:"3",gap:"turn",mode:"line",size:0,ro:true,ur:true,en:true,rec:true}, ls.get("settings",{}));
+function saveS(){ls.set("settings",S)}
+
+/* recordings in IndexedDB, mirrored in memory so playback starts inside the tap */
+const REC = {};
+let idb=null;
+function openDB(){return new Promise(res=>{try{const r=indexedDB.open("umrah-voice",1);r.onupgradeneeded=()=>r.result.createObjectStore("rec");r.onsuccess=()=>res(r.result);r.onerror=()=>res(null)}catch(e){res(null)}})}
+function idbAll(){return new Promise(res=>{if(!idb)return res();try{const tx=idb.transaction("rec");const st=tx.objectStore("rec");const rq=st.openCursor();rq.onsuccess=()=>{const c=rq.result;if(c){REC[c.key]=c.value;c.continue()}else res()};rq.onerror=()=>res()}catch(e){res()}})}
+function idbPut(k,v){try{if(idb)idb.transaction("rec","readwrite").objectStore("rec").put(v,k)}catch(e){}}
+function idbDel(k){try{if(idb)idb.transaction("rec","readwrite").objectStore("rec").delete(k)}catch(e){}}
+
+/* ---------------- render ---------------- */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ICON_PLAY='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+const ICON_STOP='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
+const ICON_MIC='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg>';
+const ICON_EXP='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+
+function card(d){
+  const tagCls = d.tag==="Sunnah"||d.tag==="Quran" ? "badge sunnah":"badge";
+  return `<article class="dua reveal${REC[d.id]?" has-rec":""}${AUDIO[d.id]?"":" no-audio"}" id="dua-${d.id}" data-id="${d.id}">
+   <div class="dua-top"><div><h4>${esc(d.title)}</h4><p class="when">${esc(d.when)}</p></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="${tagCls}">${esc(d.tag)}</span><span class="badge rec-badge">Recorded voice</span></div></div>
+   <div class="ar" lang="ar">${d.lines.map((l,i)=>`<span class="ln" data-i="${i}">${l.ar}</span>`).join("")}</div>
+   <div class="ro">${d.lines.map((l,i)=>`<span class="ln" data-i="${i}">${esc(l.ro)}</span>`).join("")}</div>
+   <p class="ur" lang="ur">${d.ur}</p>
+   <p class="en">${esc(d.en)}</p>
+   ${d.note?`<p class="note">${esc(d.note)}</p>`:""}
+   <div class="controls">
+     <button type="button" class="play" data-act="play" aria-pressed="false">${ICON_PLAY}<span>Play</span></button>
+     <span class="noaud">Short words, no recording. Read it aloud.</span>
+     <span class="count" aria-live="polite"></span><span class="turn">Now you say it</span>
+     <span style="flex:1"></span>
+     <button type="button" class="ghost" data-act="practice">${ICON_EXP}Big screen</button>
+     <button type="button" class="ghost" data-act="rec">${ICON_MIC}Voice</button>
+   </div>
+   <div class="recpanel" data-recpanel></div>
+  </article>`;
+}
+
+const stepsEl=document.getElementById("steps");
+stepsEl.innerHTML = STEPS.map((s,i)=>`<div class="step" id="step-${i+1}">
+  <span class="num" aria-hidden="true">${i+1}</span>
+  <div class="step-head reveal"><p class="eyebrow">Step ${i+1} of ${STEPS.length}</p><h3>${esc(s.t)}</h3><p class="place">${esc(s.p)}</p></div>
+  <div class="step-body reveal"><p>${esc(s.b)}</p>
+   ${s.tips?`<ul class="tips">${s.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:""}
+   ${s.call?`<p class="callout">${esc(s.call)}</p>`:""}</div>
+  ${s.duas.length?`<div class="duas">${s.duas.map(id=>card(byId[id])).join("")}</div>`:""}
+</div>`).join("");
+
+document.getElementById("generalDuas").innerHTML = D.filter(d=>d.g).map(card).join("");
+
+document.getElementById("placeList").innerHTML = PLACES.map(c=>`<div class="city ${c.cls}">
+  <h3>${c.city} <span lang="ar">${c.ar}</span></h3>
+  <div class="places">${c.items.map(p=>`<div class="place-card reveal"><p class="pa">${p[1]}</p><h4>${esc(p[0])}</h4><p>${esc(p[2])}</p></div>`).join("")}</div>
+  ${c.city==="Madinah"?`<div class="duas">${D.filter(d=>d.m).map(card).join("")}</div>`:""}
+</div>`).join("");
+
+/* order used by practice mode */
+const ORDER = [...STEPS.flatMap(s=>s.duas), ...D.filter(d=>d.g).map(d=>d.id), ...D.filter(d=>d.m).map(d=>d.id)];
+
+/* ---------------- settings UI ---------------- */
+function syncSegs(){
+  document.querySelectorAll(".seg[data-setting]").forEach(seg=>{
+    const k=seg.dataset.setting;
+    seg.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.v===String(S[k]))));
+  });
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".seg[data-setting] button"); if(!b) return;
+  S[b.parentElement.dataset.setting]=b.dataset.v; saveS(); syncSegs();
+});
+const tg=[["showRo","ro","hide-ro"],["showUr","ur","hide-ur"],["showEn","en","hide-en"]];
+tg.forEach(([id,k,cls])=>{const el=document.getElementById(id);el.checked=S[k];document.body.classList.toggle(cls,!S[k]);
+  el.addEventListener("change",()=>{S[k]=el.checked;saveS();document.body.classList.toggle(cls,!S[k])})});
+const useRec=document.getElementById("useRec");useRec.checked=S.rec;useRec.addEventListener("change",()=>{S.rec=useRec.checked;saveS()});
+function applySize(){const base=window.matchMedia("(max-width:720px)").matches?1.85:2.1;document.documentElement.style.setProperty("--ar-size",(base+S.size*0.3).toFixed(2)+"rem")}
+document.getElementById("bigger").onclick=()=>{S.size=Math.min(5,S.size+1);saveS();applySize()};
+document.getElementById("smaller").onclick=()=>{S.size=Math.max(-2,S.size-1);saveS();applySize()};
+applySize(); syncSegs();
+
+/* ---------------- recitations ---------------- */
+/* Every dua plays a real human recitation, never a computer voice.
+   Quranic duas: Sheikh Mishary Rashid Alafasy. Sunnah duas: Hisn al-Muslim audio.
+   Each dua has one full clip (audio/<id>.m4a) and one clip per line (audio/<id>-<n>.m4a). */
+const hasAudio = id => !!AUDIO[id] || !!(S.rec && REC[id]);
+
+/* One shared audio element. Phones only allow sound that starts from a tap, so the first
+   tap anywhere "unlocks" this element; every later play then works, even after a download. */
+const AUD = new Audio(); AUD.preload="auto"; AUD.setAttribute("playsinline","");
+function silentWav(){
+  const n=800, b=new ArrayBuffer(44+n*2), v=new DataView(b), w=(o,s)=>[...s].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));
+  w(0,"RIFF");v.setUint32(4,36+n*2,true);w(8,"WAVE");w(12,"fmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,8000,true);v.setUint32(28,16000,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,"data");v.setUint32(40,n*2,true);
+  return URL.createObjectURL(new Blob([b],{type:"audio/wav"}));
+}
+const SILENT = silentWav();
+let unlocked=false;
+function unlock(){
+  if(unlocked) return; unlocked=true;
+  // Only pause the silent sound: a dua may already have started on this element.
+  try{ AUD.src=SILENT; const p=AUD.play(); if(p) p.then(()=>{ if(AUD.src===SILENT) AUD.pause(); }).catch(()=>{ if(AUD.src===SILENT) unlocked=false; }); }catch(e){unlocked=false}
+}
+["pointerdown","touchend","keydown"].forEach(t=>document.addEventListener(t,unlock,{capture:true,passive:true}));
+
+/* Clips are fetched once into memory (blob URLs). Blob URLs play reliably offline on iPhone,
+   where the service worker cannot answer the byte-range requests that audio elements make. */
+const CLIPS = {};
+function clipUrl(path){
+  if(!CLIPS[path]) CLIPS[path]=fetch(path).then(r=>{ if(!r.ok) throw new Error(r.status); return r.arrayBuffer(); }).then(b=>URL.createObjectURL(new Blob([b],{type:"audio/mp4"}))).catch(e=>{ delete CLIPS[path]; throw e; });
+  return CLIPS[path];
+}
+function clipsFor(id){ const a=AUDIO[id]; if(!a) return []; const l=[`audio/${id}.m4a`]; for(let i=1;i<=a.n;i++) l.push(`audio/${id}-${i}.m4a`); return l; }
+function prefetchAll(){ Object.keys(AUDIO).forEach(id=>clipsFor(id).forEach(p=>clipUrl(p).catch(()=>{}))); }
+if("requestIdleCallback" in window) requestIdleCallback(()=>setTimeout(prefetchAll,800)); else setTimeout(prefetchAll,2500);
+
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function wait(ms,s){return new Promise(res=>{const t0=Date.now();const iv=setInterval(()=>{if(s.cancelled||Date.now()-t0>=ms){clearInterval(iv);res()}},80)})}
+
+/* Play one clip to the end. Resolves "ok", "blocked" (phone refused to start sound) or "error". */
+function playUrl(url,rate,s){
+  return new Promise(res=>{
+    let done=false, started=false;
+    const fin=r=>{ if(done) return; done=true; clearInterval(chk); if(window.__umrahLog) window.__umrahLog("clip",s.id,r+" @"+AUD.currentTime.toFixed(2)+"/"+(AUD.duration||0).toFixed(2)); AUD.onended=AUD.onerror=AUD.onplaying=null; res(r); };
+    s.audio=AUD;
+    AUD.onended=()=>fin("ok"); AUD.onerror=()=>fin("error"); AUD.onplaying=()=>{started=true};
+    AUD.src=url; AUD.defaultPlaybackRate=rate; AUD.playbackRate=rate;
+    try{ AUD.preservesPitch=true; AUD.webkitPreservesPitch=true; }catch(e){}
+    const p=AUD.play(); if(p) p.catch(err=>fin(err&&err.name==="NotAllowedError"?"blocked":"error"));
+    const t0=Date.now();
+    const chk=setInterval(()=>{
+      if(s.cancelled) return fin("ok");
+      if(!started && !AUD.paused && AUD.currentTime>0) started=true;
+      if(started && AUD.ended) fin("ok");                                  // ended without an event
+      if(!started && Date.now()-t0>6000) fin("error");                     // never started
+      if(started && AUD.duration && Date.now()-t0 > (AUD.duration/rate)*1000+5000) fin("ok"); // stuck at the end
+    },200);
+  });
+}
+
+/* keep the screen awake while a dua plays, so the phone does not lock and cut the sound */
+let wake=null;
+async function keepAwake(on){
+  try{
+    if(on && !wake && navigator.wakeLock){ wake=await navigator.wakeLock.request("screen"); wake.addEventListener("release",()=>{wake=null}); }
+    if(!on && wake && P.el.hidden){ await wake.release(); wake=null; }
+  }catch(e){}
+}
+
+/* ---------------- player ---------------- */
+let session=null;
+const views=new Set(); // listeners for UI updates: fn(event, session)
+function emit(ev,s,extra){ if(window.__umrahLog) window.__umrahLog(ev,s.id,extra); views.forEach(f=>{try{f(ev,s,extra)}catch(e){}})}
+
+function stop(why){
+  if(window.__umrahLog) window.__umrahLog("stop-call",session&&session.id,why);
+  if(!session) return;
+  const s=session; s.cancelled=true; session=null;
+  try{ AUD.pause(); }catch(e){}
+  emit("stop",s);
+  keepAwake(false);
+}
+async function play(id){
+  stop();
+  const d=byId[id]; const s={id,cancelled:false,count:0}; session=s;
+  const rate=parseFloat(S.rate)<0.7?0.8:1, max=parseInt(S.repeat,10), gap=S.gap;
+  const rec = S.rec && REC[id];
+  if(!rec && !AUDIO[id]){ session=null; emit("error",s,"none"); return; }
+  emit("start",s); keepAwake(true);
+  const lineMode = !rec && S.mode==="line" && AUDIO[id].n>1;
+  let fails=0;
+  while(!s.cancelled && (max===0 || s.count<max)){
+    const t0=Date.now(); let r="ok";
+    try{
+      if(rec){
+        emit("line",s,-1);
+        const u=URL.createObjectURL(rec); r=await playUrl(u,rate,s); URL.revokeObjectURL(u);
+      } else if(lineMode){
+        for(let i=0;i<d.lines.length && !s.cancelled;i++){
+          emit("line",s,i); const l0=Date.now();
+          r=await playUrl(await clipUrl(`audio/${id}-${i+1}.m4a`),rate,s);
+          if(r!=="ok"||s.cancelled) break;
+          if(gap==="turn"){emit("turn",s,true); await wait(Math.max(1500,(Date.now()-l0)*1.15),s); emit("turn",s,false);}
+          else await wait(400,s);
+        }
+      } else {
+        emit("line",s,-1);
+        r=await playUrl(await clipUrl(`audio/${id}.m4a`),rate,s);
+      }
+    }catch(e){ r="error"; }
+    if(s.cancelled) break;
+    if(r==="blocked"){ emit("error",s,"blocked"); break; }
+    if(r!=="ok"){ if(++fails>=2){ emit("error",s,rec?"rec":"load"); break; } await sleep(400); continue; }
+    fails=0;
+    s.count++; emit("count",s);
+    const more = max===0 || s.count<max;
+    if(more){
+      if(gap==="turn" && !lineMode){emit("turn",s,true); await wait(Math.max(2000,(Date.now()-t0)*1.05),s); emit("turn",s,false);}
+      else if(gap!=="turn" && +gap>0){emit("turn",s,true); await wait(+gap*1000,s); emit("turn",s,false);}
+      else await wait(800,s);
+    }
+  }
+  if(session===s){session=null; emit("stop",s,"done"); keepAwake(false);}
+}
+/* phones pause audio when the app goes to the background; stop cleanly instead of stalling */
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) stop("hidden"); });
+const ERRS={
+  none:"No recording for this one. Read it aloud from the Roman Urdu, or tap Voice to add one.",
+  blocked:"The phone blocked the sound. Tap Play again.",
+  load:"Could not load the recitation. Open the app once with internet so it can save the audio.",
+  rec:"This recording could not be played. Remove it and add it again."
+};
+const errText=x=>ERRS[x]||ERRS.load;
+
+/* card view */
+function cardsFor(id){return document.querySelectorAll(`.dua[data-id="${id}"]`)}
+views.add((ev,s,x)=>{
+  cardsFor(s.id).forEach(c=>{
+    const btn=c.querySelector('[data-act="play"]'), cnt=c.querySelector(".count");
+    if(ev==="start"){c.classList.add("playing");btn.setAttribute("aria-pressed","true");btn.innerHTML=ICON_STOP+"<span>Stop</span>";cnt.textContent="";}
+    if(ev==="line"){c.querySelectorAll(".ln").forEach(l=>l.classList.toggle("on", x===-1 || +l.dataset.i===x));}
+    if(ev==="turn"){c.classList.toggle("your-turn",x)}
+    if(ev==="count"){cnt.textContent="Played "+s.count+(S.repeat==="0"?"":" of "+S.repeat)}
+    if(ev==="error"){cnt.textContent=errText(x)}
+    if(ev==="stop"){c.classList.remove("playing","your-turn");btn.setAttribute("aria-pressed","false");btn.innerHTML=ICON_PLAY+"<span>Play</span>";c.querySelectorAll(".ln").forEach(l=>l.classList.remove("on"))}
+  });
+});
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".dua [data-act]"); if(!b) return;
+  const id=b.closest(".dua").dataset.id, act=b.dataset.act;
+  if(act==="play"){ if(session&&session.id===id) stop(); else play(id); }
+  if(act==="practice") openPractice(ORDER.indexOf(id));
+  if(act==="rec") toggleRecPanel(b.closest(".dua"));
+});
+
+/* ---------------- voice recordings ---------------- */
+let mediaRec=null, recTarget=null;
+function toggleRecPanel(c){
+  const p=c.querySelector("[data-recpanel]");
+  if(p.classList.contains("open")){p.classList.remove("open");return}
+  renderRecPanel(c); p.classList.add("open");
+}
+function renderRecPanel(c){
+  const id=c.dataset.id, p=c.querySelector("[data-recpanel]"), has=!!REC[id];
+  const recording = mediaRec && recTarget===id;
+  p.innerHTML = recording
+   ? `<span class="recording-dot"></span><b>Recording…</b><button type="button" class="ghost" data-r="stoprec">Stop and save</button>`
+   : `<button type="button" class="ghost" data-r="record">${ICON_MIC}${has?"Record again":"Record now"}</button>
+      <button type="button" class="ghost" data-r="upload">Add audio file</button>
+      ${has?`<button type="button" class="ghost" data-r="delete">Remove recording</button>`:""}
+      <small>Record someone who recites well (an imam, a family member), or add an audio file from WhatsApp or voice memos. Play will then use this voice. It is saved on this phone only.</small>`;
+}
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-r]"); if(!b) return;
+  const c=b.closest(".dua"), id=c.dataset.id, r=b.dataset.r;
+  if(r==="upload"){recTarget=id; const f=document.getElementById("fileIn"); f.removeAttribute("capture"); f.click();}
+  if(r==="delete"){delete REC[id]; idbDel(id); cardsFor(id).forEach(x=>x.classList.remove("has-rec")); renderRecPanel(c);}
+  if(r==="record"){
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      const chunks=[]; mediaRec=new MediaRecorder(stream); recTarget=id;
+      mediaRec.ondataavailable=ev=>{if(ev.data.size)chunks.push(ev.data)};
+      mediaRec.onstop=()=>{stream.getTracks().forEach(t=>t.stop());const blob=new Blob(chunks,{type:mediaRec.mimeType||"audio/webm"});mediaRec=null;saveRec(id,blob);renderRecPanel(c)};
+      stop(); mediaRec.start(); renderRecPanel(c);
+    }catch(err){
+      /* microphone not allowed here: fall back to the phone's own recorder or file picker */
+      mediaRec=null; recTarget=id; const f=document.getElementById("fileIn"); f.setAttribute("capture",""); f.click();
+    }
+  }
+  if(r==="stoprec" && mediaRec){mediaRec.stop()}
+});
+document.getElementById("fileIn").addEventListener("change",e=>{
+  const f=e.target.files&&e.target.files[0]; if(f&&recTarget){saveRec(recTarget,f); cardsFor(recTarget).forEach(renderRecPanel)} e.target.value="";
+});
+function saveRec(id,blob){REC[id]=blob; idbPut(id,blob); cardsFor(id).forEach(x=>x.classList.add("has-rec"))}
+
+/* ---------------- practice mode ---------------- */
+const P={el:document.getElementById("practice"),i:0,lock:null};
+const pAr=document.getElementById("pAr"),pRo=document.getElementById("pRo"),pUr=document.getElementById("pUr"),pEn=document.getElementById("pEn"),pTitle=document.getElementById("pTitle"),pMeta=document.getElementById("pMeta"),pPlay=document.getElementById("pPlay");
+function renderPractice(){
+  const d=byId[ORDER[P.i]];
+  P.el.classList.toggle("long", d.lines.length>3 || d.lines.reduce((a,l)=>a+l.ar.length,0)>120);
+  pTitle.innerHTML=esc(d.title)+`<small>${P.i+1} of ${ORDER.length} · ${esc(d.when)}</small>`;
+  pAr.innerHTML=d.lines.map((l,i)=>`<span class="ln" data-i="${i}">${l.ar}</span>`).join("");
+  pRo.innerHTML=d.lines.map((l,i)=>`<span class="ln" data-i="${i}">${esc(l.ro)}</span>`).join("");
+  pRo.hidden=!S.ro; pUr.hidden=!S.ur; pEn.hidden=!S.en;
+  pUr.textContent=d.ur; pEn.textContent=d.en;
+  const can=hasAudio(d.id); pPlay.disabled=!can; pPlay.style.opacity=can?"":".35";
+  pMeta.textContent=can?"Press play to listen":"Short words, no recording. Read it aloud."; setPIcon(false);
+  document.getElementById("pBody").scrollTop=0;
+}
+function setPIcon(on){pPlay.classList.toggle("on",on);pPlay.setAttribute("aria-label",on?"Stop":"Play");
+  document.getElementById("pPlayIcon").innerHTML=on?'<rect x="6" y="6" width="12" height="12" rx="2"/>':'<path d="M8 5v14l11-7z"/>'}
+async function openPractice(i){
+  stop(); P.i=Math.max(0,i); renderPractice(); P.el.hidden=false; document.body.style.overflow="hidden";
+  try{P.lock=await navigator.wakeLock.request("screen")}catch(e){P.lock=null}
+}
+function closePractice(){stop();P.el.hidden=true;document.body.style.overflow="";try{P.lock&&P.lock.release()}catch(e){}}
+function go(dir){stop();P.i=(P.i+dir+ORDER.length)%ORDER.length;renderPractice()}
+document.getElementById("pClose").onclick=closePractice;
+document.getElementById("pPrev").onclick=()=>go(-1);
+document.getElementById("pNext").onclick=()=>go(1);
+pPlay.onclick=()=>{const id=ORDER[P.i]; if(session&&session.id===id) stop(); else play(id)};
+document.getElementById("startPractice").onclick=()=>openPractice(ORDER.indexOf("talbiyah"));
+document.addEventListener("keydown",e=>{if(P.el.hidden)return;if(e.key==="Escape")closePractice();if(e.key==="ArrowRight")go(1);if(e.key==="ArrowLeft")go(-1);if(e.key===" "){e.preventDefault();pPlay.click()}});
+let tx=null;P.el.addEventListener("touchstart",e=>{tx=e.touches[0].clientX},{passive:true});
+P.el.addEventListener("touchend",e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>70)go(dx<0?1:-1);tx=null},{passive:true});
+views.add((ev,s,x)=>{
+  if(P.el.hidden||s.id!==ORDER[P.i]) return;
+  if(ev==="start"){setPIcon(true);pMeta.textContent="Listening…"}
+  if(ev==="line"){[pAr,pRo].forEach(el=>el.querySelectorAll(".ln").forEach(l=>l.classList.toggle("on",x===-1||+l.dataset.i===x)));
+    const cur=x>=0&&pAr.querySelector(`.ln[data-i="${x}"]`); if(cur) cur.scrollIntoView({block:"center",behavior:"smooth"});}
+  if(ev==="turn"&&x){pMeta.innerHTML="<b>Now you say it</b>"}
+  if(ev==="turn"&&!x){pMeta.textContent="Listening…"}
+  if(ev==="count"){pMeta.innerHTML=`Played <b>${s.count}</b>${S.repeat==="0"?" · non-stop":" of "+S.repeat}`}
+  if(ev==="error"){setPIcon(false);pMeta.textContent=errText(x)}
+  if(ev==="stop"){setPIcon(false);[pAr,pRo].forEach(el=>el.querySelectorAll(".ln").forEach(l=>l.classList.remove("on")));
+    if(x!=="done")pMeta.textContent="Stopped. Press play to listen again.";
+    if(x==="done")pMeta.innerHTML=`Done · played <b>${s.count}</b> ${s.count===1?"time":"times"}. Swipe for the next dua.`}
+});
+
+/* ---------------- tawaf / sa'i counter ---------------- */
+const C=Object.assign({mode:"tawaf",tawaf:0,sai:0},ls.get("counter",{}));
+const ring=document.getElementById("kaabaRing");
+function arcPath(cx,cy,r,a0,a1){const p=a=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];const[x0,y0]=p(a0),[x1,y1]=p(a1);return`M${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 0 0 ${x1.toFixed(1)} ${y1.toFixed(1)}`}
+function drawCounter(){
+  const n=C[C.mode], cx=130, cy=130, r=104, seg=2*Math.PI/7, gapA=.09;
+  let h="";
+  for(let i=0;i<7;i++){
+    // anticlockwise from the Black Stone corner (bottom-right of the drawing)
+    const start=Math.PI/4 - i*seg - gapA/2, end=start - seg + gapA;
+    h+=`<path class="seg-arc${i<n?" done":(i===n?" next":"")}" d="${arcPath(cx,cy,r,start,end)}"/>`;
+  }
+  if(C.mode==="tawaf"){
+    h+=`<g transform="translate(130 130) rotate(-8)"><rect x="-42" y="-46" width="84" height="92" fill="#0d0e0f" stroke="var(--gold-bright)" stroke-width="1"/><rect x="-42" y="-28" width="84" height="9" fill="#c9a54d"/><circle cx="40" cy="44" r="5" fill="var(--gold-bright)"/></g>`;
+  }else{
+    h+=`<text x="130" y="96" text-anchor="middle" class="csub">${n%2===0?"AT SAFA":"AT MARWAH"}</text>`;
+  }
+  h+=`<text x="130" y="${C.mode==="tawaf"?236:148}" text-anchor="middle" class="cnum" ${C.mode==="tawaf"?'style="font-size:30px"':""}>${n} / 7</text>`;
+  ring.innerHTML=h;
+  const st=document.getElementById("cStatus"), add=document.getElementById("cAdd");
+  if(C.mode==="tawaf"){
+    st.innerHTML = n>=7 ? `<strong>Tawaf complete</strong>Cover both shoulders, pray 2 rak'ahs at Maqam Ibrahim, then drink Zamzam.`
+      : `<strong>Round ${n+1} of 7</strong>${n===0?"Start at the Black Stone: Bismillahi, Allahu Akbar.":"Keep the Kaaba on your left."}`;
+    add.textContent = n>=7?"All 7 rounds done":"I reached the Black Stone";
+  }else{
+    const from=n%2===0?"Safa":"Marwah", to=n%2===0?"Marwah":"Safa";
+    st.innerHTML = n>=7 ? `<strong>Sa'i complete</strong>You finished at Marwah. Now cut or shave your hair.`
+      : `<strong>Trip ${n+1} of 7</strong>Walk from ${from} to ${to}.`;
+    add.textContent = n>=7?"All 7 trips done":"I arrived at "+to;
+  }
+  add.disabled=n>=7;
+  document.querySelectorAll("#cMode button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===C.mode)));
+  document.getElementById("cDua").textContent = C.mode==="tawaf"?"Play Rabbana atina":"Play Safa dhikr";
+  ls.set("counter",C);
+}
+document.getElementById("cMode").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;C.mode=b.dataset.v;resetArm=false;drawCounter()});
+document.getElementById("cAdd").onclick=()=>{if(C[C.mode]<7){C[C.mode]++;try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}drawCounter()}};
+document.getElementById("cUndo").onclick=()=>{if(C[C.mode]>0){C[C.mode]--;drawCounter()}};
+let resetArm=false;const cReset=document.getElementById("cReset");
+cReset.onclick=()=>{if(!resetArm){resetArm=true;cReset.textContent="Tap again to reset";setTimeout(()=>{resetArm=false;cReset.textContent="Start again"},3000);return}
+  C[C.mode]=0;resetArm=false;cReset.textContent="Start again";drawCounter()};
+document.getElementById("cDua").onclick=()=>{const id=C.mode==="tawaf"?"rabbana":"safaDhikr"; if(session&&session.id===id)stop(); else play(id)};
+drawCounter();
+
+/* ---------------- checklist ---------------- */
+const done=new Set(ls.get("check",[]));
+const cl=document.getElementById("checklist");
+cl.innerHTML=CHECK.map((t,i)=>`<label><input type="checkbox" id="ck${i}" data-i="${i}"${done.has(i)?" checked":""}><span>${esc(t)}</span></label>`).join("");
+function updCheck(){document.getElementById("checkBar").style.width=(done.size/CHECK.length*100)+"%";document.getElementById("checkCount").textContent=done.size+" of "+CHECK.length+" ready"}
+cl.addEventListener("change",e=>{const i=+e.target.dataset.i;e.target.checked?done.add(i):done.delete(i);ls.set("check",[...done]);updCheck()});
+updCheck();
+
+/* ---------------- trip status ---------------- */
+(function(){
+  const start=new Date(2026,10,3), end=new Date(2026,11,1), now=new Date(); now.setHours(0,0,0,0);
+  const day=864e5, el=document.getElementById("tripStatus");
+  if(now<start){const n=Math.round((start-now)/day); el.innerHTML=n===1?"<strong>Departs tomorrow</strong>":`Departs in <strong>${n} days</strong>`;}
+  else if(now<=end){el.innerHTML=`Day <strong>${Math.round((now-start)/day)+1}</strong> of 29`;}
+  else el.innerHTML="<strong>Umrah Mubarak</strong>";
+})();
+
+/* ---------------- hero star pattern ---------------- */
+(function(){
+  const cv=document.getElementById("stars"), ctx=cv.getContext("2d"); if(!ctx) return;
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let w,h,dpr; function size(){dpr=Math.min(2,window.devicePixelRatio||1);w=cv.clientWidth;h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+  function star(x,y,r,rot){ctx.beginPath();for(let k=0;k<2;k++){const a0=rot+k*Math.PI/4;for(let j=0;j<4;j++){const a=a0+j*Math.PI/2;const px=x+r*Math.cos(a),py=y+r*Math.sin(a);j===0?ctx.moveTo(px,py):ctx.lineTo(px,py)}ctx.closePath()}ctx.stroke()}
+  function frame(t){
+    ctx.clearRect(0,0,w,h); const s=64, rot=reduce?0:t*0.00005;
+    for(let y=-s;y<h+s;y+=s)for(let x=-s;x<w+s;x+=s){
+      const dx=x-w*0.78, dy=y-h*0.45, dist=Math.sqrt(dx*dx+dy*dy);
+      const a=Math.max(0.04,0.28-dist/1600);
+      ctx.strokeStyle=`rgba(201,165,77,${a})`; ctx.lineWidth=1;
+      star(x+((y/s)%2?s/2:0),y,s*0.36,rot);
+    }
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  size(); window.addEventListener("resize",()=>{size(); if(reduce) frame(0)}); requestAnimationFrame(frame);
+})();
+
+/* ---------------- jump to #section after content is built ---------------- */
+function toHash(){const h=location.hash.slice(1);const el=h&&document.getElementById(h);if(el)el.scrollIntoView({behavior:"auto",block:"start"})}
+if(location.hash){toHash();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(toHash);}
+
+/* ---------------- boot recordings ---------------- */
+openDB().then(db=>{idb=db;return idbAll()}).then(()=>{Object.keys(REC).forEach(id=>cardsFor(id).forEach(c=>c.classList.add("has-rec")))});
+
+})();
+</script>
+<!-- Added by scripts/build.mjs: install prompt, offline badge and service worker -->
+<style>
+.pwa-bar{position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--kiswa);color:#efe7d2;border-top:1px solid rgba(226,192,109,.35);
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 -8px 24px rgba(0,0,0,.25);transform:translateY(0);transition:transform .35s}
+.pwa-bar[hidden]{display:none!important}
+body:has(.pwa-bar:not([hidden])){padding-bottom:110px}
+.pwa-bar img{width:40px;height:40px;border-radius:10px;flex:none}
+.pwa-bar .txt{flex:1;min-width:180px;font-size:.92rem;line-height:1.4}
+.pwa-bar .txt b{color:#e2c06d;font-weight:600}
+.pwa-bar .acts{display:flex;gap:8px}
+.pwa-bar button{border-radius:999px;padding:10px 16px;font-weight:700;min-height:44px}
+.pwa-bar .go{background:#c9a54d;color:#141210;border:0}
+.pwa-bar .no{background:transparent;color:#a9a28f;border:1px solid rgba(226,192,109,.3)}
+.pwa-toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(68px + env(safe-area-inset-top,0px));z-index:95;background:var(--surface);color:var(--ink);
+  border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-weight:600;font-size:.9rem;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;gap:10px;align-items:center;max-width:calc(100% - 32px);white-space:nowrap}
+.pwa-toast[hidden]{display:none!important}
+.pwa-toast button{border:0;background:#c9a54d;color:#141210;border-radius:999px;padding:6px 12px;font-weight:700}
+.off-pill{display:none;flex:none;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:var(--green-soft);border-radius:999px;padding:6px 10px}
+body.is-offline .off-pill{display:inline-flex}
+.nav .install-link{flex:none;border:1px solid var(--gold);color:var(--gold);background:transparent;border-radius:999px;padding:7px 12px;font-weight:700;font-size:.85rem}
+.nav .install-link[hidden]{display:none!important}
+</style>
+
+<div class="pwa-bar" id="pwaBar" hidden role="region" aria-label="Install app">
+  <img src="/icons/icon-192.png" alt="">
+  <p class="txt" id="pwaTxt"><b>Install Labbayk on this phone</b><br>Opens like an app and works without internet in the Haram.</p>
+  <div class="acts">
+    <button class="no" id="pwaLater" type="button">Later</button>
+    <button class="go" id="pwaGo" type="button">Install</button>
+  </div>
+</div>
+<div class="pwa-toast" id="pwaToast" hidden role="status"><span id="pwaToastTxt"></span><button id="pwaToastBtn" type="button" hidden>Refresh</button></div>
+
+<script>
+(function(){
+  "use strict";
+  var nav = document.querySelector(".nav .wrap"), sizer = nav && nav.querySelector(".sizer");
+  // offline pill + install button in the top bar
+  var pill = document.createElement("span"); pill.className="off-pill"; pill.textContent="Offline";
+  var inst = document.createElement("button"); inst.type="button"; inst.className="install-link"; inst.textContent="Install app"; inst.hidden=true;
+  if (nav && sizer){ nav.insertBefore(pill, sizer); nav.insertBefore(inst, sizer); }
+  function net(){ document.body.classList.toggle("is-offline", !navigator.onLine); }
+  addEventListener("online", net); addEventListener("offline", net); net();
+
+  var bar=document.getElementById("pwaBar"), txt=document.getElementById("pwaTxt"), go=document.getElementById("pwaGo");
+  var toast=document.getElementById("pwaToast"), toastTxt=document.getElementById("pwaToastTxt"), toastBtn=document.getElementById("pwaToastBtn");
+  function showToast(t, btn, ms){ toastTxt.textContent=t; toastBtn.hidden=!btn; toast.hidden=false; if(ms) setTimeout(function(){toast.hidden=true}, ms); }
+
+  var standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+  function dismissed(){ try{ return +localStorage.getItem("umrah:installLater")>Date.now(); }catch(e){ return false; } }
+  function later(){ try{ localStorage.setItem("umrah:installLater", String(Date.now()+3*864e5)); }catch(e){} bar.hidden=true; }
+  document.getElementById("pwaLater").onclick=later;
+
+  var deferred=null;
+  addEventListener("beforeinstallprompt", function(e){
+    e.preventDefault(); deferred=e; inst.hidden=false;
+    if(!standalone && !dismissed()) bar.hidden=false;
+  });
+  function install(){
+    if(deferred){ deferred.prompt(); deferred.userChoice.finally(function(){ deferred=null; bar.hidden=true; inst.hidden=true; }); }
+    else if(isIOS){ iosHelp(); bar.hidden=false; }
+  }
+  function iosHelp(){
+    txt.innerHTML='<b>Add to Home Screen</b><br>In Safari tap the Share button <span aria-hidden="true">(square with arrow)</span>, then choose <b>Add to Home Screen</b>.';
+    go.hidden=true; document.getElementById("pwaLater").textContent="Got it";
+  }
+  go.onclick=install; inst.onclick=install;
+  if(isIOS && !standalone){ inst.hidden=false; if(!dismissed()){ iosHelp(); bar.hidden=false; } }
+  addEventListener("appinstalled", function(){ bar.hidden=true; inst.hidden=true; showToast("Installed. Find Labbayk on your home screen.", false, 4000); });
+
+  // service worker: caches the whole app so it opens without internet
+  if("serviceWorker" in navigator && location.protocol!=="file:"){
+    addEventListener("load", function(){
+      navigator.serviceWorker.register("/sw.js").then(function(reg){
+        var fresh = !navigator.serviceWorker.controller;
+        reg.addEventListener("updatefound", function(){
+          var w=reg.installing; if(!w) return;
+          w.addEventListener("statechange", function(){
+            if(w.state!=="installed") return;
+            if(fresh) showToast("Ready to use offline", false, 3500);
+            else { showToast("A new version is ready", true); toastBtn.onclick=function(){ w.postMessage("skipWaiting"); }; }
+          });
+        });
+      }).catch(function(){});
+      var reloaded=false;
+      navigator.serviceWorker.addEventListener("controllerchange", function(){ if(reloaded) return; reloaded=true; if(!toastBtn.hidden) location.reload(); });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

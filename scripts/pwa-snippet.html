@@ -1,0 +1,92 @@
+<!-- Added by scripts/build.mjs: install prompt, offline badge and service worker -->
+<style>
+.pwa-bar{position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--kiswa);color:#efe7d2;border-top:1px solid rgba(226,192,109,.35);
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 -8px 24px rgba(0,0,0,.25);transform:translateY(0);transition:transform .35s}
+.pwa-bar[hidden]{display:none!important}
+body:has(.pwa-bar:not([hidden])){padding-bottom:110px}
+.pwa-bar img{width:40px;height:40px;border-radius:10px;flex:none}
+.pwa-bar .txt{flex:1;min-width:180px;font-size:.92rem;line-height:1.4}
+.pwa-bar .txt b{color:#e2c06d;font-weight:600}
+.pwa-bar .acts{display:flex;gap:8px}
+.pwa-bar button{border-radius:999px;padding:10px 16px;font-weight:700;min-height:44px}
+.pwa-bar .go{background:#c9a54d;color:#141210;border:0}
+.pwa-bar .no{background:transparent;color:#a9a28f;border:1px solid rgba(226,192,109,.3)}
+.pwa-toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(68px + env(safe-area-inset-top,0px));z-index:95;background:var(--surface);color:var(--ink);
+  border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-weight:600;font-size:.9rem;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;gap:10px;align-items:center;max-width:calc(100% - 32px);white-space:nowrap}
+.pwa-toast[hidden]{display:none!important}
+.pwa-toast button{border:0;background:#c9a54d;color:#141210;border-radius:999px;padding:6px 12px;font-weight:700}
+.off-pill{display:none;flex:none;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:var(--green-soft);border-radius:999px;padding:6px 10px}
+body.is-offline .off-pill{display:inline-flex}
+.nav .install-link{flex:none;border:1px solid var(--gold);color:var(--gold);background:transparent;border-radius:999px;padding:7px 12px;font-weight:700;font-size:.85rem}
+.nav .install-link[hidden]{display:none!important}
+</style>
+
+<div class="pwa-bar" id="pwaBar" hidden role="region" aria-label="Install app">
+  <img src="/icons/icon-192.png" alt="">
+  <p class="txt" id="pwaTxt"><b>Install Labbayk on this phone</b><br>Opens like an app and works without internet in the Haram.</p>
+  <div class="acts">
+    <button class="no" id="pwaLater" type="button">Later</button>
+    <button class="go" id="pwaGo" type="button">Install</button>
+  </div>
+</div>
+<div class="pwa-toast" id="pwaToast" hidden role="status"><span id="pwaToastTxt"></span><button id="pwaToastBtn" type="button" hidden>Refresh</button></div>
+
+<script>
+(function(){
+  "use strict";
+  var nav = document.querySelector(".nav .wrap"), sizer = nav && nav.querySelector(".sizer");
+  // offline pill + install button in the top bar
+  var pill = document.createElement("span"); pill.className="off-pill"; pill.textContent="Offline";
+  var inst = document.createElement("button"); inst.type="button"; inst.className="install-link"; inst.textContent="Install app"; inst.hidden=true;
+  if (nav && sizer){ nav.insertBefore(pill, sizer); nav.insertBefore(inst, sizer); }
+  function net(){ document.body.classList.toggle("is-offline", !navigator.onLine); }
+  addEventListener("online", net); addEventListener("offline", net); net();
+
+  var bar=document.getElementById("pwaBar"), txt=document.getElementById("pwaTxt"), go=document.getElementById("pwaGo");
+  var toast=document.getElementById("pwaToast"), toastTxt=document.getElementById("pwaToastTxt"), toastBtn=document.getElementById("pwaToastBtn");
+  function showToast(t, btn, ms){ toastTxt.textContent=t; toastBtn.hidden=!btn; toast.hidden=false; if(ms) setTimeout(function(){toast.hidden=true}, ms); }
+
+  var standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+  function dismissed(){ try{ return +localStorage.getItem("umrah:installLater")>Date.now(); }catch(e){ return false; } }
+  function later(){ try{ localStorage.setItem("umrah:installLater", String(Date.now()+3*864e5)); }catch(e){} bar.hidden=true; }
+  document.getElementById("pwaLater").onclick=later;
+
+  var deferred=null;
+  addEventListener("beforeinstallprompt", function(e){
+    e.preventDefault(); deferred=e; inst.hidden=false;
+    if(!standalone && !dismissed()) bar.hidden=false;
+  });
+  function install(){
+    if(deferred){ deferred.prompt(); deferred.userChoice.finally(function(){ deferred=null; bar.hidden=true; inst.hidden=true; }); }
+    else if(isIOS){ iosHelp(); bar.hidden=false; }
+  }
+  function iosHelp(){
+    txt.innerHTML='<b>Add to Home Screen</b><br>In Safari tap the Share button <span aria-hidden="true">(square with arrow)</span>, then choose <b>Add to Home Screen</b>.';
+    go.hidden=true; document.getElementById("pwaLater").textContent="Got it";
+  }
+  go.onclick=install; inst.onclick=install;
+  if(isIOS && !standalone){ inst.hidden=false; if(!dismissed()){ iosHelp(); bar.hidden=false; } }
+  addEventListener("appinstalled", function(){ bar.hidden=true; inst.hidden=true; showToast("Installed. Find Labbayk on your home screen.", false, 4000); });
+
+  // service worker: caches the whole app so it opens without internet
+  if("serviceWorker" in navigator && location.protocol!=="file:"){
+    addEventListener("load", function(){
+      navigator.serviceWorker.register("/sw.js").then(function(reg){
+        var fresh = !navigator.serviceWorker.controller;
+        reg.addEventListener("updatefound", function(){
+          var w=reg.installing; if(!w) return;
+          w.addEventListener("statechange", function(){
+            if(w.state!=="installed") return;
+            if(fresh) showToast("Ready to use offline", false, 3500);
+            else { showToast("A new version is ready", true); toastBtn.onclick=function(){ w.postMessage("skipWaiting"); }; }
+          });
+        });
+      }).catch(function(){});
+      var reloaded=false;
+      navigator.serviceWorker.addEventListener("controllerchange", function(){ if(reloaded) return; reloaded=true; if(!toastBtn.hidden) location.reload(); });
+    });
+  }
+})();
+</script>
