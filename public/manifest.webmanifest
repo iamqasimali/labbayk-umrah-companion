@@ -2,9 +2,9 @@
   "name": "Labbayk Umrah Companion",
   "short_name": "Labbayk",
   "description": "Umrah steps and duas in Arabic, Roman Urdu, Urdu and English, with repeat playback and a Tawaf/Sa'i counter. Works offline.",
-  "id": "/",
-  "start_url": "/?source=app",
-  "scope": "/",
+  "id": "./",
+  "start_url": "./?source=app",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0d0e0f",
@@ -12,12 +12,12 @@
   "lang": "en",
   "categories": ["lifestyle", "education", "travel"],
   "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Round counter", "url": "/#counter", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Umrah steps", "url": "/#journey", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Round counter", "url": "./#counter", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Umrah steps", "url": "./#journey", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
   ]
 }

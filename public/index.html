@@ -11,11 +11,11 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Labbayk">
-<link rel="manifest" href="/manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
-<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-<link rel="preload" href="/fonts/ScheherazadeNew-400-arabic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="fonts/ScheherazadeNew-400-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
@@ -1083,7 +1083,7 @@ body.is-offline .off-pill{display:inline-flex}
 </style>
 
 <div class="pwa-bar" id="pwaBar" hidden role="region" aria-label="Install app">
-  <img src="/icons/icon-192.png" alt="">
+  <img src="icons/icon-192.png" alt="">
   <p class="txt" id="pwaTxt"><b>Install Labbayk on this phone</b><br>Opens like an app and works without internet in the Haram.</p>
   <div class="acts">
     <button class="no" id="pwaLater" type="button">Later</button>
@@ -1133,7 +1133,7 @@ body.is-offline .off-pill{display:inline-flex}
   // service worker: caches the whole app so it opens without internet
   if("serviceWorker" in navigator && location.protocol!=="file:"){
     addEventListener("load", function(){
-      navigator.serviceWorker.register("/sw.js").then(function(reg){
+      navigator.serviceWorker.register("sw.js").then(function(reg){
         var fresh = !navigator.serviceWorker.controller;
         reg.addEventListener("updatefound", function(){
           var w=reg.installing; if(!w) return;

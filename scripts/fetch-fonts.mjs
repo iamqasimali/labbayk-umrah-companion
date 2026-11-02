@@ -17,7 +17,7 @@ for (const m of css.matchAll(/\/\*\s*([\w-]+)\s*\*\/\s*(@font-face\s*{[^}]*})/g)
   const name = `${fam}-${wt}-${subset}.woff2`;
   const buf = Buffer.from(await (await fetch(url)).arrayBuffer());
   await writeFile(`public/fonts/${name}`, buf);
-  out += `/* ${subset} */\n` + block.replace(url, `/fonts/${name}`) + "\n";
+  out += `/* ${subset} */\n` + block.replace(url, name) + "\n";
   n++;
 }
 await writeFile("public/fonts/fonts.css", out);

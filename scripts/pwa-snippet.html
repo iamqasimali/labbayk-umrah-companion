@@ -23,7 +23,7 @@ body.is-offline .off-pill{display:inline-flex}
 </style>
 
 <div class="pwa-bar" id="pwaBar" hidden role="region" aria-label="Install app">
-  <img src="/icons/icon-192.png" alt="">
+  <img src="icons/icon-192.png" alt="">
   <p class="txt" id="pwaTxt"><b>Install Labbayk on this phone</b><br>Opens like an app and works without internet in the Haram.</p>
   <div class="acts">
     <button class="no" id="pwaLater" type="button">Later</button>
@@ -73,7 +73,7 @@ body.is-offline .off-pill{display:inline-flex}
   // service worker: caches the whole app so it opens without internet
   if("serviceWorker" in navigator && location.protocol!=="file:"){
     addEventListener("load", function(){
-      navigator.serviceWorker.register("/sw.js").then(function(reg){
+      navigator.serviceWorker.register("sw.js").then(function(reg){
         var fresh = !navigator.serviceWorker.controller;
         reg.addEventListener("updatefound", function(){
           var w=reg.installing; if(!w) return;
