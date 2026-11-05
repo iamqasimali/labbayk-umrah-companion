@@ -204,6 +204,48 @@ body.hide-ro .ro, body.hide-ur .ur, body.hide-en .en{display:none}
 .ck-g{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:12px 0 2px}
 .city .two{margin-top:4px}
 .more-h{font-size:1.15rem;margin-top:8px;color:var(--gold)}
+/* Kaaba map */
+.kmap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+.kmap-fig{margin:0;position:sticky;top:calc(64px + env(safe-area-inset-top,0px))}
+.kmap-fig svg{width:100%;max-width:560px;height:auto;display:block;margin:0 auto}
+.km-floor{fill:var(--surface);stroke:var(--line)}
+.km-ring{fill:none;stroke:var(--line);stroke-width:22}
+.km-rabbana{fill:none;stroke:var(--gold-bright);stroke-width:22;opacity:.45}
+.km-dir{fill:none;stroke:var(--muted);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.km-walker{fill:var(--gold)}
+.km-start{stroke:var(--green);stroke-width:3;stroke-dasharray:6 4}
+.km-hijr{fill:var(--surface-2);stroke:var(--muted);stroke-width:3}
+.km-kaaba{fill:#0d0e0f;stroke:#c9a54d;stroke-width:1.5}
+.km-band{fill:none;stroke:#c9a54d;stroke-width:3}
+.km-door{stroke:#e2c06d;stroke-width:5;stroke-linecap:round}
+.km-multazam{stroke:var(--green);stroke-width:5;stroke-linecap:round}
+.km-mizab{stroke:#e2c06d;stroke-width:3;stroke-linecap:round}
+.km-stone{fill:#2b2b2b;stroke:#e2c06d;stroke-width:2}
+.km-maqam{fill:#e2c06d;stroke:var(--gold);stroke-width:1.5}
+.km-zamzam{fill:#3d8fd1}
+.km-masa{fill:var(--surface-2);stroke:var(--line)}
+.km-green{fill:var(--green);opacity:.75}
+.km-hill{fill:var(--gold-bright);opacity:.8}
+.km-walk{stroke:var(--muted);stroke-width:2;stroke-dasharray:4 4}
+.km-arrowhead{fill:var(--muted)}
+.km-north{fill:var(--muted)}
+.km-lbl{font:600 13px var(--f-body);fill:var(--ink)}
+.km-small{font:500 10px var(--f-body);fill:var(--muted)}
+.km-mark{cursor:pointer;outline:none}
+.km-mark circle{fill:var(--gold);stroke:var(--surface);stroke-width:2;transition:r .2s}
+.km-mark text{font:700 10px var(--f-body);fill:#fff;pointer-events:none}
+.km-mark.on circle{fill:var(--danger);r:12}
+.km-mark:focus-visible circle{stroke:var(--gold-bright);stroke-width:3}
+.kmap-legend{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:none}
+.kmap-legend li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:28px 1fr;gap:4px 10px;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.kmap-legend li.on{border-color:var(--gold-bright);box-shadow:0 0 0 3px var(--hl)}
+.kmap-legend .n{width:26px;height:26px;border-radius:50%;background:var(--gold);color:#fff;font-weight:700;font-size:.8rem;display:grid;place-items:center;grid-row:span 3}
+.kmap-legend h4{font-size:1rem;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.kmap-legend h4 [lang="ar"]{color:var(--gold);font-size:1.15rem}
+.kmap-legend p{color:var(--muted);font-size:.92rem}
+.kmap-legend a{font-size:.88rem;font-weight:600}
+@media (max-width:720px){.kmap{grid-template-columns:1fr}.kmap-fig{position:static}}
+@media (prefers-reduced-motion: reduce){.km-walker{display:none}}
 .saw{font-family:var(--f-ar);font-size:1.15em;line-height:1;font-style:normal}
 .more-p{color:var(--muted);max-width:65ch;margin-top:-8px}
 .check label{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer}
@@ -351,6 +393,62 @@ footer a{color:#e2c06d}
       </div>
 
       <div class="timeline" id="steps"></div>
+    </div>
+  </section>
+
+  <section data-view="umrah" id="kaaba-map">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">کعبہ کا نقشہ · Map</p>
+        <h2>Map of the Kaaba and the Haram</h2>
+        <p>Where each corner and place is, which way to walk in Tawaf, and where Safa and Marwah are. Tap a number to learn about that spot and open its dua.</p>
+      </div>
+      <div class="kmap">
+        <figure class="kmap-fig">
+          <svg id="kmapSvg" viewBox="0 0 420 420" role="img" aria-labelledby="kmapTitle">
+            <title id="kmapTitle">Map of the Kaaba, the Mataf, Maqam Ibrahim, Hijr Ismail, Zamzam, Safa and Marwah. Tawaf goes anticlockwise, starting at the Black Stone.</title>
+            <defs>
+              <marker id="kmArrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="km-arrowhead"/></marker>
+            </defs>
+            <rect x="4" y="4" width="412" height="412" rx="16" class="km-floor"/>
+            <!-- Mas'a (Safa to Marwah) -->
+            <rect x="356" y="40" width="48" height="340" rx="10" class="km-masa"/>
+            <rect x="356" y="186" width="48" height="10" class="km-green"/><rect x="356" y="226" width="48" height="10" class="km-green"/>
+            <path d="M366,378 q16,-26 32,0 z" class="km-hill"/><path d="M366,42 q16,26 32,0 z" class="km-hill"/>
+            <line x1="380" y1="350" x2="380" y2="80" class="km-walk" marker-end="url(#kmArrow)"/>
+            <text x="380" y="402" class="km-lbl" text-anchor="middle">Safa</text>
+            <text x="380" y="28" class="km-lbl" text-anchor="middle">Marwah</text>
+            <!-- Mataf ring and Tawaf direction (anticlockwise) -->
+            <circle cx="180" cy="210" r="140" class="km-ring"/>
+            <path d="M180,350 A140,140 0 0 0 320,210" class="km-rabbana"/>
+            <path id="kmPath" d="M320,210 A140,140 0 1 0 40,210 A140,140 0 1 0 320,210" fill="none" stroke="none"/>
+            <path d="M200,71 L180,70 L196,58" class="km-dir"/><path d="M41,190 L40,210 L52,195" class="km-dir"/><path d="M160,349 L180,350 L164,362" class="km-dir"/>
+            <circle r="6" class="km-walker"><animateMotion dur="14s" repeatCount="indefinite" rotate="auto"><mpath href="#kmPath"/></animateMotion></circle>
+            <text x="180" y="98" class="km-small" text-anchor="middle">Mataf · walk with the Kaaba on your left</text>
+            <!-- start line from the Black Stone -->
+            <line x1="230" y1="210" x2="334" y2="210" class="km-start"/>
+            <!-- Hijr Ismail (Hateem) on the north-west side -->
+            <path d="M172,162 C150,116 86,178 132,202" class="km-hijr"/>
+            <!-- the Kaaba -->
+            <g class="km-kaaba-g">
+              <polygon points="180,160 230,210 180,260 130,210" class="km-kaaba"/>
+              <polyline points="155,185 180,160 205,185" class="km-band"/>
+              <line x1="206" y1="186" x2="214" y2="194" class="km-door"/>
+              <line x1="219" y1="199" x2="230" y2="210" class="km-multazam"/>
+              <line x1="155" y1="185" x2="147" y2="177" class="km-mizab"/>
+              <circle cx="230" cy="210" r="4.5" class="km-stone"/>
+            </g>
+            <!-- Maqam Ibrahim and Zamzam -->
+            <rect x="240" y="157" width="12" height="12" rx="3" transform="rotate(45 246 163)" class="km-maqam"/>
+            <path d="M262,236 q-7,10 0,14 q7,-4 0,-14 z" class="km-zamzam"/>
+            <!-- North -->
+            <g transform="translate(30 36)"><path d="M0,10 L6,-8 L12,10 L6,5 z" class="km-north"/><text x="6" y="26" class="km-small" text-anchor="middle">N</text></g>
+            <text x="18" y="404" class="km-small">Not to scale</text>
+            <g id="kmMarks"></g>
+          </svg>
+        </figure>
+        <ol class="kmap-legend" id="kmapLegend"></ol>
+      </div>
     </div>
   </section>
 
@@ -883,7 +981,7 @@ const STEPS = [
    "There is no fixed dua for each round: Quran, dhikr, durood or your own duas in any language, in a low voice",
    "If wudu breaks, make wudu again. Before 4 rounds are done, start the Tawaf again; after 4 rounds, continue where you stopped",
    "Women: avoid the crowded area near the Kaaba and use the upper floors if needed. No Tawaf during menstruation",
-   "Use the round counter below so you don't lose count"],duas:["tawafNiyyahDua","tawafStart","rabbana"],
+   "See the Kaaba map (top bar) for where each corner is","Use the round counter below so you don't lose count"],duas:["tawafNiyyahDua","tawafStart","rabbana"],
   more:{h:"Duas taught for each part of the Tawaf (optional)",p:"Many Umrah books teach a dua for each corner. They are not required: the only Sunnah dua with a fixed place is Rabbana atina between Rukn al-Yamani and the Black Stone. Say whatever you can, or your own duas.",ids:["afterIstilam","imanan","hadhalBayt","rabbalBayt","ruknIraqi","mizab","ruknShami","ruknYamani","rabbanaAdkhilna"]}},
  {t:"Two rak'ahs at Maqam Ibrahim",p:"Behind Maqam Ibrahim, or anywhere in the Haram",
   b:"After the seventh round and the last istilam, cover both shoulders. Pray two rak'ahs behind or near Maqam Ibrahim, or anywhere in the Haram if it is crowded: Surah al-Kafirun in the first and al-Ikhlas in the second. If it is a makruh time, wait.",
@@ -1387,9 +1485,42 @@ updCheck();
 })();
 
 /* ---------------- jump to #section after content is built ---------------- */
+
+/* ---------------- Kaaba map ---------------- */
+const KMAP = [
+ [1,222,232,"الْحَجَرُ الْأَسْوَدُ","Hajar al-Aswad (Black Stone)","In the eastern corner. Tawaf starts and ends here: face it, raise your hands and say Bismillahi Allahu Akbar at the start of every round.","tawafStart"],
+ [2,326,196,"خَطُّ الْبِدَايَةِ","Start and end line","Lines up with the Black Stone. A green light on the Haram wall marks it; count one round each time you reach it.",null],
+ [3,226,174,"بَابُ الْكَعْبَةِ","Door of the Kaaba","On the north-east wall, near the Black Stone, raised above the ground.",null],
+ [4,244,198,"الْمُلْتَزَمُ","Multazam","The wall between the Black Stone and the door. A place for heartfelt dua if you can reach it without pushing. Don't touch the perfumed cloth while in Ihram.",null],
+ [5,264,148,"مَقَامُ إِبْرَاهِيمَ","Maqam Ibrahim","The golden enclosure opposite the door. Pray 2 rak'ahs behind it after Tawaf, or anywhere in the Haram if crowded.","maqam"],
+ [6,180,144,"الرُّكْنُ الْعِرَاقِيُّ","Rukn al-Iraqi","The northern corner, the first corner after the Black Stone.","ruknIraqi"],
+ [7,108,150,"حِجْرُ إِسْمَاعِيلَ","Hijr Ismail (Hateem)","The low semicircular wall. It is part of the Kaaba, so Tawaf must go around the outside of it.",null],
+ [8,138,168,"الْمِيزَابُ","Mizab al-Rahmah","The golden water spout on the roof, above the Hijr Ismail.","mizab"],
+ [9,112,224,"الرُّكْنُ الشَّامِيُّ","Rukn al-Shami","The western corner, after the Hijr Ismail.","ruknShami"],
+ [10,180,278,"الرُّكْنُ الْيَمَانِيُّ","Rukn al-Yamani","The southern corner. Touch it with your right hand if you can; if not, pass by without pointing.","ruknYamani"],
+ [11,286,316,"بَيْنَ الرُّكْنَيْنِ","Rukn al-Yamani to the Black Stone","The gold part of the ring. Recite Rabbana atina here in every round.","rabbana"],
+ [12,276,256,"زَمْزَمُ","Zamzam","The well is under the Mataf, east of the Kaaba. Drink from the coolers all around the Haram.","zamzam"],
+ [13,380,362,"الصَّفَا","Safa","Sa'i starts here. Recite the ayah once, then face the Kaaba and say the dhikr.","safaVerse"],
+ [14,380,58,"الْمَرْوَةُ","Marwah","Sa'i ends here after the 7th trip. Say the same dhikr facing the Kaaba each time you arrive.","safaDhikr"],
+ [15,380,211,"الْأَمْيَالُ الْخَضْرَاءُ","Green lights","The stretch between the green lights in the Mas'a. Men jog lightly here; women walk normally.","saiDua"]
+];
+(function(){
+  const marks=document.getElementById("kmMarks"), legend=document.getElementById("kmapLegend");
+  marks.innerHTML=KMAP.map(([n,x,y,ar,en])=>`<g class="km-mark" data-k="${n}" tabindex="0" role="button" aria-label="${n}. ${en.replace(/"/g,"")}"><circle cx="${x}" cy="${y}" r="10"/><text x="${x}" y="${y+3.5}" text-anchor="middle">${n}</text></g>`).join("");
+  legend.innerHTML=KMAP.map(([n,,,ar,en,txt,dua])=>`<li data-k="${n}" id="km-${n}"><span class="n">${n}</span><h4>${esc(en)} <span lang="ar">${ar}</span></h4><p>${esc(txt)}</p>${dua?`<a href="#dua-${dua}">Open the dua</a>`:""}</li>`).join("");
+  function pick(n,scrollLegend){
+    marks.querySelectorAll(".km-mark").forEach(m=>m.classList.toggle("on",m.dataset.k===String(n)));
+    legend.querySelectorAll("li").forEach(l=>l.classList.toggle("on",l.dataset.k===String(n)));
+    if(scrollLegend){const li=document.getElementById("km-"+n); if(li) li.scrollIntoView({block:"nearest",behavior:"smooth"});}
+  }
+  marks.addEventListener("click",e=>{const m=e.target.closest(".km-mark"); if(m) pick(m.dataset.k,true);});
+  marks.addEventListener("keydown",e=>{const m=e.target.closest(".km-mark"); if(m&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pick(m.dataset.k,true);}});
+  legend.addEventListener("click",e=>{if(e.target.closest("a"))return; const li=e.target.closest("li"); if(li) pick(li.dataset.k,false);});
+})();
+
 /* ---------------- two guides: Umrah and Madinah ---------------- */
 const NAV = {
-  umrah:[["#journey","Steps"],["#more-duas","More duas"],["#counter","Counter"],["#places","Makkah places"],["#prepare","Ihram & checklist"]],
+  umrah:[["#journey","Steps"],["#kaaba-map","Kaaba map"],["#more-duas","More duas"],["#counter","Counter"],["#places","Makkah places"],["#prepare","Ihram & checklist"]],
   madinah:[["#madinah","Madinah steps"],["#madinah-places","Places & etiquette"]]
 };
 function setView(v){
