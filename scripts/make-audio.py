@@ -81,7 +81,9 @@ def snap_end(path, b):
 def piece_audio(p):
     if "quran" in p:
         path, a, b = quran_range(p["quran"], *p["words"])
-        a, b = snap_start(path, a), snap_end(path, b)
+        # lead_in: start this many seconds before the word's timestamp, without snapping (verse openings)
+        a = a - p["lead_in"] if "lead_in" in p else snap_start(path, a)
+        b = snap_end(path, b)
     else:
         path, a, b = os.path.join(src_dir, p["file"]), p["from"], p["to"]
         if b < 0: b = len(load(path)) / SR + b
