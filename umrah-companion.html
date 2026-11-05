@@ -195,6 +195,8 @@ body.hide-ro .ro, body.hide-ur .ur, body.hide-en .en{display:none}
 .panel h3{font-size:1.25rem}
 .panel ul{margin:0;padding-left:20px;display:grid;gap:4px;color:var(--muted)}
 .check{display:grid;gap:4px}
+.ck-g{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:12px 0 2px}
+.city .two{margin-top:4px}
 .check label{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer}
 .check label:hover{background:var(--surface-2)}
 .check input{width:22px;height:22px;accent-color:var(--gold);flex:none;margin-top:2px}
@@ -314,6 +316,7 @@ footer a{color:#e2c06d}
         <p class="eyebrow">Step by step</p>
         <h2>The Umrah, in order</h2>
         <p>Nine steps from your home in Pakistan to the end of Sa'i. Under each step are the duas for that moment. Nothing beyond the Sunnah duas is compulsory. Between them, speak to Allah in your own words, in any language.</p>
+        <p class="callout">"One Umrah to the next is an expiation for the sins between them." (Bukhari, Muslim)</p>
       </div>
 
       <div class="listen" aria-labelledby="listenH">
@@ -399,18 +402,38 @@ footer a{color:#e2c06d}
         <div class="panel">
           <h3>While in Ihram, avoid</h3>
           <ul>
-            <li>Perfume or scented soap, on body or clothes</li>
-            <li>Cutting hair or nails</li>
-            <li>Men: stitched clothing, covering the head</li>
-            <li>Women: niqab and gloves (cover the face with a loose cloth if needed)</li>
-            <li>Arguing, bad words, and marital relations</li>
+            <li>Perfume or anything scented: soap, wipes, cream, scented food</li>
+            <li>Cutting or pulling out hair or nails</li>
+            <li>Marriage or proposing, intimate talk or relations</li>
+            <li>Arguing, quarrelling and every sin</li>
             <li>Hunting or harming animals</li>
+            <li>Men: stitched clothes, covering the head or face, footwear covering the middle bone of the foot</li>
+            <li>Women: niqab and gloves. If needed, hold a cloth that does not touch the face</li>
+            <li>Rubbing the body so hair falls, or wiping the face with a towel</li>
+          </ul>
+          <h3 style="margin-top:8px">Allowed in Ihram</h3>
+          <ul>
+            <li>Bathing gently, without rubbing off dirt</li>
+            <li>Ring, watch, glasses, money belt, hearing aid</li>
+            <li>Umbrella, miswak, unscented kohl</li>
+            <li>Filing a broken nail, a bandage, pulling a tooth if needed</li>
+            <li>Changing into fresh Ihram sheets</li>
+            <li>A blanket while sleeping (men keep head and face uncovered) and a pillow</li>
+            <li>Killing a dangerous animal</li>
+          </ul>
+          <h3 style="margin-top:8px">The five Miqats</h3>
+          <ul>
+            <li><b>Dhul Hulaifah</b> (Abyar Ali): coming from Madinah</li>
+            <li><b>Al-Juhfah</b> (Rabigh): from Syria and Egypt</li>
+            <li><b>Qarn al-Manazil</b>: from Najd</li>
+            <li><b>Yalamlam</b>: from Yemen</li>
+            <li><b>Dhat Irq</b>: from Iraq and Iran</li>
           </ul>
           <h3 style="margin-top:8px">Flying from Pakistan</h3>
-          <p style="color:var(--muted)">If you fly straight to Jeddah, you cross the Miqat in the air. Wear Ihram at home or at the airport, pray 2 rak'ahs, and make the niyyah when the crew announces the Miqat (about 30 minutes before landing). If you go to Madinah first, wear Ihram later at Dhul Hulaifah (Masjid Shajarah) on the way to Makkah.</p>
+          <p style="color:var(--muted)">If you fly straight to Jeddah, you cross the Miqat in the air. Wear Ihram at home or at the airport, pray 2 rak'ahs, and make the niyyah when the crew announces the Miqat (about 15 to 30 minutes before landing). If you go to Madinah first, wear Ihram later at Dhul Hulaifah (Masjid Shajarah) on the way to Makkah.</p>
         </div>
         <div class="panel">
-          <h3>Preparation checklist</h3>
+          <h3>Preparation and packing</h3>
           <div class="bar" aria-hidden="true"><i id="checkBar"></i></div>
           <p id="checkCount" style="color:var(--muted);font-size:.9rem"></p>
           <div class="check" id="checklist"></div>
@@ -484,6 +507,11 @@ const D = [
   lines:[{ar:"بِسْمِ اللَّهِ، وَالْحَمْدُ لِلَّهِ",ro:"Bismillah, wal-hamdu lillah,"},{ar:"سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ",ro:"Subhanalladhi sakhkhara lana hadha wa ma kunna lahu muqrineen,"},{ar:"وَإِنَّا إِلَىٰ رَبِّنَا لَمُنْقَلِبُونَ",ro:"wa inna ila Rabbina lamunqaliboon."},{ar:"الْحَمْدُ لِلَّهِ، الْحَمْدُ لِلَّهِ، الْحَمْدُ لِلَّهِ",ro:"Alhamdulillah, alhamdulillah, alhamdulillah,"},{ar:"اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ",ro:"Allahu Akbar, Allahu Akbar, Allahu Akbar,"},{ar:"سُبْحَانَكَ اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي فَاغْفِرْ لِي",ro:"Subhanaka Allahumma inni zalamtu nafsi faghfir li,"},{ar:"فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",ro:"fa innahu la yaghfirudh-dhunuba illa ant."}],
   ur:"اللہ کے نام سے، اور تمام تعریف اللہ کے لیے ہے۔ پاک ہے وہ ذات جس نے اسے ہمارے بس میں کر دیا، ورنہ ہم اسے قابو میں نہ لا سکتے تھے، اور بے شک ہم اپنے رب کی طرف لوٹنے والے ہیں۔ تمام تعریف اللہ کے لیے ہے (تین بار)، اللہ سب سے بڑا ہے (تین بار)۔ اے اللہ! تو پاک ہے، میں نے اپنی جان پر ظلم کیا، مجھے بخش دے، کیونکہ تیرے سوا کوئی گناہوں کو نہیں بخشتا۔",
   en:"In the name of Allah, and all praise is for Allah. Glory be to the One who placed this at our service, for we could never have done it ourselves, and to our Lord we will surely return. All praise is for Allah (3 times). Allah is the Greatest (3 times). Glory be to You, O Allah. I have wronged myself, so forgive me, for none forgives sins except You."},
+ {id:"niyyahUmrah",title:"Intention for Umrah",when:"At the Miqat, before the Talbiyah",tag:"Common dua",
+  lines:[{ar:"اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ",ro:"Allahumma inni uridul-'Umrata,"},{ar:"فَيَسِّرْهَا لِي وَتَقَبَّلْهَا مِنِّي",ro:"fa yassirha li wa taqabbalha minni."}],
+  ur:"اے اللہ! میں عمرہ کا ارادہ کرتا ہوں، اسے میرے لیے آسان فرما اور مجھ سے قبول فرما۔",
+  en:"O Allah, I intend to perform Umrah, so make it easy for me and accept it from me.",
+  note:"The intention is in the heart. These words are a widely taught way to express it; then say the Sunnah words below and begin the Talbiyah."},
  {id:"niyyah",title:"Niyyah for Umrah",when:"At the Miqat, after wearing Ihram",tag:"Sunnah",
   lines:[{ar:"لَبَّيْكَ اللَّهُمَّ عُمْرَةً",ro:"Labbayka Allahumma 'Umratan."}],
   ur:"اے اللہ! میں عمرہ کے لیے حاضر ہوں۔",
@@ -498,6 +526,11 @@ const D = [
   lines:[{ar:"أَعُوذُ بِاللَّهِ الْعَظِيمِ، وَبِوَجْهِهِ الْكَرِيمِ",ro:"A'udhu billahil-'Azeem, wa bi-wajhihil-Kareem,"},{ar:"وَسُلْطَانِهِ الْقَدِيمِ، مِنَ الشَّيْطَانِ الرَّجِيمِ",ro:"wa sultanihil-qadeem, minash-shaytanir-rajeem."},{ar:"بِسْمِ اللَّهِ، وَالصَّلَاةُ وَالسَّلَامُ عَلَىٰ رَسُولِ اللَّهِ",ro:"Bismillah, wassalatu wassalamu 'ala Rasulillah."},{ar:"اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",ro:"Allahummaftah li abwaba rahmatik."}],
   ur:"میں عظمت والے اللہ کی، اس کے کریم چہرے کی اور اس کی ازلی بادشاہی کی پناہ مانگتا ہوں مردود شیطان سے۔ اللہ کے نام سے، اور درود و سلام ہو اللہ کے رسول پر۔ اے اللہ! میرے لیے اپنی رحمت کے دروازے کھول دے۔",
   en:"I seek refuge in Allah the Almighty, in His noble Face and His eternal authority, from the accursed devil. In the name of Allah, peace and blessings upon the Messenger of Allah. O Allah, open the doors of Your mercy for me."},
+ {id:"enterAlt",title:"Entering the Masjid (short dua)",when:"Also authentic: you can say this one instead",tag:"Sunnah",
+  lines:[{ar:"اللَّهُمَّ اغْفِرْ لِي ذُنُوبِي",ro:"Allahummaghfir li dhunubi,"},{ar:"وَافْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",ro:"waftah li abwaba rahmatik."}],
+  ur:"اے اللہ! میرے گناہ بخش دے اور میرے لیے اپنی رحمت کے دروازے کھول دے۔",
+  en:"O Allah, forgive me my sins and open for me the doors of Your mercy.",
+  note:"From the hadith of Fatimah (RA) in Tirmidhi and Ibn Majah."},
  {id:"exit",title:"Leaving the Masjid",when:"Step out with the left foot",tag:"Sunnah",
   lines:[{ar:"بِسْمِ اللَّهِ، وَالصَّلَاةُ وَالسَّلَامُ عَلَىٰ رَسُولِ اللَّهِ",ro:"Bismillah, wassalatu wassalamu 'ala Rasulillah."},{ar:"اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",ro:"Allahumma inni as'aluka min fadlik."},{ar:"اللَّهُمَّ اعْصِمْنِي مِنَ الشَّيْطَانِ الرَّجِيمِ",ro:"Allahumma'simni minash-shaytanir-rajeem."}],
   ur:"اللہ کے نام سے، اور درود و سلام ہو اللہ کے رسول پر۔ اے اللہ! میں تجھ سے تیرا فضل مانگتا ہوں۔ اے اللہ! مجھے مردود شیطان سے محفوظ رکھ۔",
@@ -511,7 +544,7 @@ const D = [
   lines:[{ar:"بِسْمِ اللَّهِ، اللَّهُ أَكْبَرُ",ro:"Bismillahi, Allahu Akbar."}],
   ur:"اللہ کے نام سے، اللہ سب سے بڑا ہے۔",
   en:"In the name of Allah, Allah is the Greatest.",
-  note:"Raise your right hand towards the Black Stone. On the following rounds, saying Allahu Akbar is enough."},
+  note:"Raise your hands towards the Black Stone, palms facing it. Many guides add \"wa lillahil-hamd\" (and all praise is for Allah). Repeat at the start of every round."},
  {id:"rabbana",title:"Rabbana atina",when:"Between Rukn al-Yamani and the Black Stone, every round",tag:"Sunnah",
   lines:[{ar:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً",ro:"Rabbana atina fid-dunya hasanatan,"},{ar:"وَفِي الْآخِرَةِ حَسَنَةً",ro:"wa fil-akhirati hasanatan,"},{ar:"وَقِنَا عَذَابَ النَّارِ",ro:"wa qina 'adhaban-nar."}],
   ur:"اے ہمارے رب! ہمیں دنیا میں بھلائی دے اور آخرت میں بھی بھلائی دے، اور ہمیں آگ کے عذاب سے بچا۔",
@@ -527,6 +560,11 @@ const D = [
   ur:"اے اللہ! میں تجھ سے نفع دینے والا علم، پاکیزہ رزق اور قبول ہونے والا عمل مانگتا ہوں۔",
   en:"O Allah, I ask You for beneficial knowledge, good and pure provision, and deeds that are accepted.",
   note:"An authentic dua from the Sunnah. There is no fixed Zamzam dua: drink facing the Kaaba and ask Allah for anything you need."},
+ {id:"zamzam2",title:"Zamzam dua (commonly recited)",when:"While drinking Zamzam",tag:"Common dua",
+  lines:[{ar:"اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا",ro:"Allahumma inni as'aluka 'ilman nafi'an,"},{ar:"وَرِزْقًا وَاسِعًا",ro:"wa rizqan wasi'an,"},{ar:"وَشِفَاءً مِنْ كُلِّ دَاءٍ",ro:"wa shifa'an min kulli da'."}],
+  ur:"اے اللہ! میں تجھ سے نفع دینے والا علم، کشادہ رزق اور ہر بیماری سے شفا مانگتا ہوں۔",
+  en:"O Allah, I ask You for beneficial knowledge, plentiful provision and cure from every illness.",
+  note:"Reported from Ibn Abbas (RA). The first line is the same as in the dua above, so you can learn it with that recording."},
  {id:"safaVerse",title:"Approaching Safa",when:"Only once, before the first trip",tag:"Sunnah",
   lines:[{ar:"إِنَّ الصَّفَا وَالْمَرْوَةَ مِن شَعَائِرِ اللَّهِ",ro:"Innas-Safa wal-Marwata min sha'a'irillah."},{ar:"أَبْدَأُ بِمَا بَدَأَ اللَّهُ بِهِ",ro:"Abda'u bima bada'allahu bih."}],
   ur:"بے شک صفا اور مروہ اللہ کی نشانیوں میں سے ہیں۔ میں وہیں سے شروع کرتا ہوں جہاں سے اللہ نے شروع کیا۔",
@@ -536,6 +574,11 @@ const D = [
   ur:"اللہ سب سے بڑا ہے (تین بار)۔ اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس کا کوئی شریک نہیں، اسی کی بادشاہی ہے اور اسی کے لیے تمام تعریف ہے، اور وہ ہر چیز پر قادر ہے۔ اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس نے اپنا وعدہ پورا کیا، اپنے بندے کی مدد کی، اور اکیلے ہی تمام لشکروں کو شکست دی۔",
   en:"Allah is the Greatest (3 times). There is no god but Allah alone, without partner. His is the dominion and His is all praise, and He has power over everything. There is no god but Allah alone. He fulfilled His promise, helped His servant and alone defeated the confederates.",
   note:"Say it three times, making your own dua in between. Repeat it on Marwah and at every arrival."},
+ {id:"saiDua",title:"Dua during Sa'i",when:"Between Safa and Marwah",tag:"Companions",
+  lines:[{ar:"رَبِّ اغْفِرْ وَارْحَمْ",ro:"Rabbighfir warham,"},{ar:"إِنَّكَ أَنْتَ الْأَعَزُّ الْأَكْرَمُ",ro:"innaka antal-A'azzul-Akram."}],
+  ur:"اے میرے رب! بخش دے اور رحم فرما، بے شک تو ہی سب سے زیادہ عزت والا، سب سے زیادہ کرم والا ہے۔",
+  en:"My Lord, forgive and have mercy. You are the Most Mighty, the Most Generous.",
+  note:"Recited during Sa'i by Abdullah ibn Mas'ud and Abdullah ibn Umar (RA). Some books write \"wa anta\" instead of \"innaka anta\"; the meaning is the same. There is no fixed dua for Sa'i."},
  /* general */
  {id:"durood",title:"Durood Ibrahimi",when:"Anytime, especially during Sa'i (the same as in Salah)",tag:"Sunnah",g:1,
   lines:[{ar:"اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ",ro:"Allahumma salli 'ala Muhammadin wa 'ala ali Muhammad,"},{ar:"كَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ",ro:"kama sallayta 'ala Ibrahima wa 'ala ali Ibrahim,"},{ar:"إِنَّكَ حَمِيدٌ مَجِيدٌ",ro:"innaka Hamidun Majid."},{ar:"اللَّهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ",ro:"Allahumma barik 'ala Muhammadin wa 'ala ali Muhammad,"},{ar:"كَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ",ro:"kama barakta 'ala Ibrahima wa 'ala ali Ibrahim,"},{ar:"إِنَّكَ حَمِيدٌ مَجِيدٌ",ro:"innaka Hamidun Majid."}],
@@ -580,27 +623,46 @@ const AUDIO = {"travel":{"n":2},"ride":{"n":7},"talbiyah":{"n":4},"enter":{"n":4
 
 const STEPS = [
  {t:"Before leaving home",p:"Your home in Pakistan · 3 November",
-  b:"Pray two rak'ahs if you wish. Ask Allah for ease, forgiveness and acceptance. Ask family to forgive you and settle any debts.",
-  tips:["Pack Ihram, unscented soap, a small bag for shoes, and comfortable sandals","Keep passport, visa and Nusuk app ready"],duas:["travel","ride"]},
+  b:"Remove unwanted hair, trim your nails, take a ghusl and put perfume on your body (not on the Ihram cloth). Men can put on the Ihram sheets at home if that is easier. Pray two rak'ahs before leaving and ask Allah for ease and acceptance. Ask family to forgive you and settle any debts.",
+  tips:["Take one thing at a time. Leave ego and temper at home and be patient with crowds","Set daily goals: Quran, nafl salah, duas, tasbeeh and quiet reflection","Carry a light backpack: cash, a small Quran, a dua book, a light prayer mat, tissues and snacks","Keep passport, visa and the Nusuk app ready"],duas:["travel","ride"]},
  {t:"At the Miqat: entering Ihram",p:"On the plane before Jeddah, or Dhul Hulaifah from Madinah",
-  b:"Take ghusl, wear Ihram (men: two white sheets; women: modest normal clothes), then make the niyyah and begin the Talbiyah.",
-  call:"From Pakistan the Miqat comes during the flight. Wear Ihram before boarding and make the niyyah when the crew announces the Miqat.",duas:["niyyah","talbiyah"]},
- {t:"Entering Masjid al-Haram",p:"Makkah · any gate, King Abdulaziz Gate is closest to the Kaaba",
-  b:"Make wudu, enter with the right foot and recite the entry dua.",tips:["Note your gate number so you can find each other later"],duas:["enter","exit"]},
+  b:"Men wear two white unstitched sheets and sandals that leave the middle bone of the foot uncovered. Women wear their normal modest clothes, covering everything except the face, hands and feet. Pray two nafl (Surah al-Kafirun, then al-Ikhlas), make the intention and begin the Talbiyah. Ihram begins with the intention and Talbiyah, not with the clothes.",
+  call:"From Pakistan the Miqat is crossed in the air, about 15 to 30 minutes before landing in Jeddah. Wear Ihram before boarding and make the intention when the crew announces the Miqat, or a little before.",
+  tips:["Say the Talbiyah often: after every salah, when waking or lying down, going up or down","Men say it aloud; women say it softly"],duas:["niyyahUmrah","niyyah","talbiyah"]},
+ {t:"Entering Makkah and Masjid al-Haram",p:"Makkah · any gate, King Abdulaziz Gate is closest to the Kaaba",
+  b:"Enter Makkah with wudu, humility and love, saying the Talbiyah, durood and dhikr. At the Haram, step in with the right foot and say one of the entry duas. Each time you enter, make the intention of i'tikaf (staying in the masjid for worship).",
+  tips:["Tawaf is the greeting of this masjid. If you are not doing Tawaf, pray 2 rak'ahs Tahiyyat al-Masjid (not at makruh times)","Mute your phone, keep your voice low and avoid worldly talk","Don't eat raw onion or garlic before coming, and don't pick up things others have dropped","Women do not enter the masjid during their period","Note your gate number so you can find each other later"],duas:["enter","enterAlt","exit"]},
  {t:"First sight of the Kaaba",p:"Mataf, the open courtyard around the Kaaba",
-  b:"A moment for your own dua. Speak to Allah from the heart.",duas:["kaaba"]},
+  b:"Raise your hands, say Allahu Akbar, send durood on the Prophet ﷺ and make dua for as long as you can. Speak to Allah from the heart.",duas:["kaaba"]},
  {t:"Tawaf: seven rounds",p:"Around the Kaaba, keeping it on your left",
-  b:"Start at the line of the Black Stone (a green light on the wall marks it). Walk anticlockwise for seven rounds. Wudu is required.",
-  tips:["Men: right shoulder uncovered (idtiba) for this Tawaf; walk briskly in the first three rounds if possible","There is no fixed dua for each round. Recite Quran, durood, istighfar or your own duas","Use the round counter below so you don't lose count"],duas:["tawafStart","rabbana"]},
+  b:"Seven rounds anticlockwise, starting and ending at the Black Stone (a green light on the wall marks the line). Wudu is required. Stop the Talbiyah when you reach the Black Stone.",
+  tips:["Men: before starting, pass the upper sheet under the right arm so the right shoulder is bare (idtiba) for the whole Tawaf",
+   "Intention: stand facing the Black Stone and intend, in your heart or in any language: \"O Allah, I intend the Tawaf of Umrah for You. Make it easy for me and accept it from me.\"",
+   "Istilam: kiss or touch the Black Stone only if you can reach it without pushing. Otherwise raise your hands towards it, palms facing it, say Bismillahi Allahu Akbar, then kiss your palms. Do this at the start of every round and once more after the seventh (8 times)",
+   "Men walk briskly (ramal) in the first three rounds if the crowd allows",
+   "Touch Rukn al-Yamani if you can; if it is crowded, pass by without pointing",
+   "Go around the outside of the Hijr Ismail (Hateem), because it is part of the Kaaba",
+   "Don't face the Kaaba while walking, only when starting at the Black Stone",
+   "There is no fixed dua for each round: Quran, dhikr, durood or your own duas in any language, in a low voice",
+   "If wudu breaks, make wudu again. Before 4 rounds are done, start the Tawaf again; after 4 rounds, continue where you stopped",
+   "Women: avoid the crowded area near the Kaaba and use the upper floors if needed. No Tawaf during menstruation",
+   "Use the round counter below so you don't lose count"],duas:["tawafStart","rabbana"]},
  {t:"Two rak'ahs at Maqam Ibrahim",p:"Behind Maqam Ibrahim, or anywhere in the Haram",
-  b:"Cover both shoulders again, then pray two rak'ahs without blocking anyone.",duas:["maqam"]},
- {t:"Drink Zamzam",p:"Zamzam coolers throughout the Haram",b:"Drink and ask Allah for whatever you need.",duas:["zamzam"]},
+  b:"After the seventh round and the last istilam, cover both shoulders. Pray two rak'ahs behind or near Maqam Ibrahim, or anywhere in the Haram if it is crowded: Surah al-Kafirun in the first and al-Ikhlas in the second. If it is a makruh time, wait.",
+  tips:["Afterwards, make dua at the Multazam (between the Black Stone and the Kaaba door) if you can reach it without pushing. Don't touch the perfumed Kiswah while in Ihram"],duas:["maqam"]},
+ {t:"Drink Zamzam",p:"Zamzam coolers throughout the Haram",
+  b:"Face the Kaaba and drink Zamzam, standing if you can, and ask Allah for whatever you need. The Prophet ﷺ said Zamzam is for whatever it is drunk for.",duas:["zamzam","zamzam2"]},
  {t:"Sa'i between Safa and Marwah",p:"The Mas'a gallery, first floor or roof if crowded",
-  b:"Seven trips: Safa to Marwah is one, Marwah back to Safa is two. You finish at Marwah.",
-  tips:["Men jog lightly between the green lights; women walk normally","No fixed dua for each trip; durood, istighfar and personal duas","Electric carts and wheelchairs are available for elderly pilgrims"],duas:["safaVerse","safaDhikr"]},
+  b:"Seven trips: Safa to Marwah is one, Marwah back to Safa is two, and you finish at Marwah. If you go straight from Tawaf, do istilam of the Black Stone once more (the ninth) before walking to Safa.",
+  tips:["Sa'i must come after a Tawaf. Wudu is recommended but not required, and women can do Sa'i during their period",
+   "At Safa and at every arrival at Safa or Marwah, face the Kaaba, raise your hands and recite the dhikr below",
+   "Men jog lightly between the green lights; women walk normally",
+   "Don't take long breaks between trips without a reason, and avoid idle talk",
+   "After the seventh trip at Marwah, face the Kaaba and make dua. Two nafl in the Haram afterwards are optional",
+   "Electric carts and wheelchairs are available for elderly pilgrims"],duas:["safaVerse","safaDhikr","saiDua"]},
  {t:"Halq or Taqsir: finishing Umrah",p:"Barber shops outside Marwah gate",
-  b:"Men shave the head (best) or shorten hair evenly all over. Women cut about 2 cm (a fingertip's length) from the end of their hair. Your Umrah is complete and Ihram ends.",
-  call:"Umrah Mubarak! There is no special dua for cutting hair. Thank Allah and make dua for your family.",duas:[]}
+  b:"Men shave the whole head (best), or shorten the hair evenly by about an inch (a finger joint). Women gather their hair and cut about an inch from the end; women do not shave. Do this inside the Haram boundaries. Your Umrah is complete and the restrictions of Ihram are lifted.",
+  call:"Umrah Mubarak! There is no special dua for cutting hair. Thank Allah for this blessing and make dua for your family.",duas:[]}
 ];
 
 const PLACES = [
@@ -614,17 +676,27 @@ const PLACES = [
   ["Jabal al-Nour (Cave Hira)","جَبَلُ النُّورِ","Where the first verses of the Quran were revealed. A steep climb; go early morning."],
   ["Jabal Thawr","جَبَلُ ثَوْرٍ","The cave where the Prophet ﷺ and Abu Bakr hid during the Hijrah."],
   ["Mina, Arafat, Muzdalifah","مِنَى · عَرَفَات · مُزْدَلِفَة","The Hajj sites, a short drive away. Jabal al-Rahmah stands in Arafat."],
-  ["Masjid Aisha (Tan'im)","مَسْجِدُ عَائِشَةَ","The nearest Miqat if you want to do another Umrah while staying in Makkah."]]},
+  ["Masjid Aisha (Tan'im)","مَسْجِدُ عَائِشَةَ","The nearest Miqat if you want to do another Umrah while staying in Makkah."]],
+  notes:[["Virtues of Makkah",["Allah swears by Makkah in the Quran and calls it Umm al-Qura, the Mother of Towns","The first House of worship for mankind, and the qiblah of every Muslim","One prayer in Masjid al-Haram is worth 100,000 prayers elsewhere","A sanctuary: no hunting, no cutting its trees, no picking up lost items that are not yours","Good deeds are multiplied here, so take extra care to avoid sins"]],
+         ["Etiquette in Makkah",["Avoid pointless talk and arguments; forgive people quickly","Never push or hurt anyone in the crowds","Say the Talbiyah, durood and dhikr often while in Ihram","Don't take Haram property (books, chairs) home"]]]},
  {city:"Madinah",ar:"الْمَدِينَةُ الْمُنَوَّرَةُ",cls:"madinah",items:[
   ["Masjid an-Nabawi","الْمَسْجِدُ النَّبَوِيُّ","The Prophet's ﷺ mosque. One prayer here is better than a thousand elsewhere, except Masjid al-Haram."],
   ["Rawdah","الرَّوْضَةُ الشَّرِيفَةُ","A garden of Paradise between the Prophet's ﷺ house and minbar. Book a permit in Nusuk; women have separate times."],
   ["Jannat al-Baqi","جَنَّةُ الْبَقِيعِ","Resting place of many Companions and family of the Prophet ﷺ. Visiting hours are usually after Fajr and Asr, for men."],
   ["Masjid Quba","مَسْجِدُ قُبَاءٍ","The first mosque in Islam. Praying two rak'ahs here carries the reward of an Umrah."],
   ["Mount Uhud","جَبَلُ أُحُدٍ","Site of the Battle of Uhud. Greet the martyrs, including Hamzah (RA)."],
-  ["Masjid al-Qiblatayn","مَسْجِدُ الْقِبْلَتَيْنِ","Where the qiblah was changed from Jerusalem to Makkah."]]}
+  ["Masjid al-Qiblatayn","مَسْجِدُ الْقِبْلَتَيْنِ","Where the qiblah was changed from Jerusalem to Makkah."]],
+  notes:[["Etiquette in Madinah",["Come with the right intention, not as a tourist","Send abundant durood on the Prophet ﷺ","Keep wudu, smell pleasant and dress decently","Speak softly in Masjid an-Nabawi","Don't step over people for a place, and don't pray in walkways","Don't waste food or water, and don't litter"]],
+         ["Don't miss",["Pray 2 rak'ahs Tahiyyat al-Masjid each time you enter (not at makruh times)","Give salam to the Prophet ﷺ, then Abu Bakr and Umar (RA)","Pray 2 rak'ahs in Masjid Quba: the reward of an Umrah","Pray 2 rak'ahs in the Rawdah, gently, without pushing (Nusuk permit)","Visit the martyrs of Uhud and Jannat al-Baqi and pray for them"]]]}
 ];
 
-const CHECK = ["Learn the Talbiyah","Learn Rabbana atina","Learn the Safa and Marwah dhikr","Learn the masjid entry dua","Understand the seven Tawaf rounds","Understand the seven Sa'i trips","Know the rules of Ihram","Prepare duas for parents and family","Write your personal duas","Pack comfortable footwear, medicines and Ihram"];
+const CHECK = [
+ ["Before you travel",["Make a sincere intention and repent for past sins","Make sure the money for the trip is halal","Ask parents, relatives and friends to forgive you","Arrange debts; write a will with two witnesses","Plan to make up missed prayers, fasts and zakat","Vaccinations: meningitis, polio and flu (as required)","Passport valid for 6 months or more","Photocopies of passport, visa and tickets","Medicines packed with the prescription","Saudi riyals and a bank card","Learn the Talbiyah, Rabbana atina, Safa dhikr and masjid duas","Walk daily and get used to sleeping and waking early"]],
+ ["Documents and money",["Passport, visa and ticket copies","Vaccination card","Money","Important phone numbers","Small Quran and dua book","Mobile phone and charger","Light prayer mat"]],
+ ["Toiletries (unscented)",["Miswak, toothbrush and toothpaste","Unscented soap and shampoo","Brush and comb","Nail cutter and scissors (use before Ihram)","Tissues and unscented wet wipes","Deodorant (unscented while in Ihram)","Vaseline or lotion","Hand sanitizer","Safety pins for the Ihram"]],
+ ["Medicines",["Regular medication","Tablets for nausea and dizziness","Pain relief","Throat lozenges and anti-allergy","Cold and flu relief","Antibiotic (prescribed)","Band-aids","Antibacterial cream"]],
+ ["Other useful items",["Universal adaptor","Alarm or phone alarm","Earplugs and eye mask","Small mirror","Snacks and biscuits","Zip-lock bags","Sleeping mat (chatai)","Comfortable sandals and a bag for shoes"]]
+];
 
 /* ---------------- storage helpers ---------------- */
 const ls = {
@@ -686,6 +758,7 @@ document.getElementById("generalDuas").innerHTML = D.filter(d=>d.g).map(card).jo
 document.getElementById("placeList").innerHTML = PLACES.map(c=>`<div class="city ${c.cls}">
   <h3>${c.city} <span lang="ar">${c.ar}</span></h3>
   <div class="places">${c.items.map(p=>`<div class="place-card reveal"><p class="pa">${p[1]}</p><h4>${esc(p[0])}</h4><p>${esc(p[2])}</p></div>`).join("")}</div>
+  ${c.notes?`<div class="two">${c.notes.map(([h,l])=>`<div class="panel"><h3>${esc(h)}</h3><ul>${l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div>`:""}
   ${c.city==="Madinah"?`<div class="duas">${D.filter(d=>d.m).map(card).join("")}</div>`:""}
 </div>`).join("");
 
@@ -998,11 +1071,12 @@ document.getElementById("cDua").onclick=()=>{const id=C.mode==="tawaf"?"rabbana"
 drawCounter();
 
 /* ---------------- checklist ---------------- */
-const done=new Set(ls.get("check",[]));
+const CK=[]; CHECK.forEach(([g,items],gi)=>items.forEach((t,i)=>CK.push({id:gi+"-"+i,g,t})));
+const done=new Set(ls.get("check2",[]));
 const cl=document.getElementById("checklist");
-cl.innerHTML=CHECK.map((t,i)=>`<label><input type="checkbox" id="ck${i}" data-i="${i}"${done.has(i)?" checked":""}><span>${esc(t)}</span></label>`).join("");
-function updCheck(){document.getElementById("checkBar").style.width=(done.size/CHECK.length*100)+"%";document.getElementById("checkCount").textContent=done.size+" of "+CHECK.length+" ready"}
-cl.addEventListener("change",e=>{const i=+e.target.dataset.i;e.target.checked?done.add(i):done.delete(i);ls.set("check",[...done]);updCheck()});
+cl.innerHTML=CHECK.map(([g,items],gi)=>`<p class="ck-g">${esc(g)}</p>`+items.map((t,i)=>{const id=gi+"-"+i;return `<label><input type="checkbox" id="ck${id}" data-id="${id}"${done.has(id)?" checked":""}><span>${esc(t)}</span></label>`}).join("")).join("");
+function updCheck(){const n=CK.filter(c=>done.has(c.id)).length;document.getElementById("checkBar").style.width=(n/CK.length*100)+"%";document.getElementById("checkCount").textContent=n+" of "+CK.length+" ready"}
+cl.addEventListener("change",e=>{const id=e.target.dataset.id;e.target.checked?done.add(id):done.delete(id);ls.set("check2",[...done]);updCheck()});
 updCheck();
 
 /* ---------------- trip status ---------------- */
