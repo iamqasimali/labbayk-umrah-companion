@@ -92,6 +92,12 @@ svg{flex-shrink:0}
 .nav a{flex:none;text-decoration:none;color:var(--muted);font-weight:600;font-size:.9rem;padding:8px 12px;border-radius:999px;white-space:nowrap}
 .nav a:hover{color:var(--ink);background:var(--surface-2)}
 .nav .sizer{margin-left:auto;display:flex;gap:4px;flex:none}
+.nav-links{display:flex;gap:2px;flex:none}
+.view-switch{display:flex;flex:none;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px;margin-right:6px}
+.view-switch button{border:0;background:transparent;border-radius:999px;padding:8px 14px;font-weight:700;font-size:.88rem;color:var(--muted);white-space:nowrap;min-height:38px}
+.view-switch button[aria-selected="true"]{background:var(--kiswa);color:#e2c06d}
+.guide-note{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:24px}
+.guide-note p{flex:1;min-width:200px;color:var(--muted)}
 .nav .sizer button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-weight:700}
 
 section{padding-block:56px}
@@ -214,6 +220,7 @@ body.hide-ro .ro, body.hide-ur .ur, body.hide-en .en{display:none}
 .ck-g{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:12px 0 2px}
 .city .two{margin-top:4px}
 .more-h{font-size:1.15rem;margin-top:8px;color:var(--gold)}
+.saw{font-family:var(--f-ar);font-size:1.15em;line-height:1;font-style:normal}
 .more-p{color:var(--muted);max-width:65ch;margin-top:-8px}
 .check label{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer}
 .check label:hover{background:var(--surface-2)}
@@ -282,7 +289,7 @@ footer a{color:#e2c06d}
       <p class="eyebrow" style="color:#c9a54d">Umrah &amp; Ziyarat · Makkah · Madinah</p>
       <p class="ar-title" lang="ar">لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ</p>
       <h1>Labbayk Umrah Companion</h1>
-      <p class="lede">Every dua from leaving home to cutting your hair, in Arabic, Roman Urdu, Urdu and English. Press play to listen, and set it to repeat until the words stay with you.</p>
+      <p class="lede">Two guides: the Umrah in Makkah, and your visit to Madinah. Every dua in Arabic, Roman Urdu, Urdu and English. Press play to listen, and set it to repeat until the words stay with you.</p>
       <div class="trip">
         <span class="chip"><strong>3 Nov</strong> Depart Pakistan</span>
         <span class="chip"><strong>1 Dec</strong> Return flight</span>
@@ -293,7 +300,8 @@ footer a{color:#e2c06d}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
           Start practising duas
         </button>
-        <a class="btn btn-ghost-dark" href="#counter">Tawaf &amp; Sa'i counter</a>
+        <a class="btn btn-ghost-dark" href="#umrah" data-go="umrah">Umrah guide</a>
+        <a class="btn btn-ghost-dark" href="#madinah" data-go="madinah">Madinah guide</a>
       </div>
     </div>
     <div class="ring" aria-hidden="true">
@@ -315,11 +323,11 @@ footer a{color:#e2c06d}
 
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
-    <a href="#journey">Umrah steps</a>
-    <a href="#more-duas">More duas</a>
-    <a href="#counter">Counter</a>
-    <a href="#places">Holy places</a>
-    <a href="#prepare">Ihram &amp; checklist</a>
+    <div class="view-switch" role="tablist" aria-label="Guide">
+      <button type="button" role="tab" data-go="umrah" aria-selected="true">Umrah · Makkah</button>
+      <button type="button" role="tab" data-go="madinah" aria-selected="false">Madinah</button>
+    </div>
+    <span class="nav-links" id="navLinks"></span>
     <div class="sizer" role="group" aria-label="Text size">
       <button type="button" id="smaller" aria-label="Smaller text">A−</button>
       <button type="button" id="bigger" aria-label="Bigger text">A+</button>
@@ -328,7 +336,7 @@ footer a{color:#e2c06d}
 </nav>
 
 <main>
-  <section id="journey">
+  <section data-view="umrah" id="journey">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">Step by step</p>
@@ -362,7 +370,7 @@ footer a{color:#e2c06d}
     </div>
   </section>
 
-  <section id="more-duas" style="background:var(--surface-2)">
+  <section data-view="umrah" id="more-duas" style="background:var(--surface-2)">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">Keep these with you</p>
@@ -373,7 +381,7 @@ footer a{color:#e2c06d}
     </div>
   </section>
 
-  <section id="counter">
+  <section data-view="umrah" id="counter">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">In the Haram</p>
@@ -399,18 +407,18 @@ footer a{color:#e2c06d}
     </div>
   </section>
 
-  <section id="places" style="background:var(--surface-2)">
+  <section data-view="umrah" id="places" style="background:var(--surface-2)">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">Ziyarat</p>
-        <h2>Holy places to know and visit</h2>
-        <p>With a month in Saudi Arabia, you have time for both cities. Rawdah visits need a permit booked in the Nusuk app.</p>
+        <h2>Holy places in Makkah</h2>
+        <p>Places inside the Haram you will see during Umrah, and places to visit in and around Makkah. Madinah has its own guide: tap Madinah at the top.</p>
       </div>
       <div id="placeList"></div>
     </div>
   </section>
 
-  <section id="prepare">
+  <section data-view="umrah" id="prepare">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">Before tomorrow</p>
@@ -462,6 +470,28 @@ footer a{color:#e2c06d}
         <p style="color:var(--muted)"><a href="https://umrah.nusuk.sa/Journey" target="_blank" rel="noopener">Nusuk: official Umrah steps and permits</a> · <a href="https://my.gov.sa/en/services/2674798" target="_blank" rel="noopener">Digital Mutawwif: 170+ duas with audio</a></p>
         <p style="color:var(--muted)">Wheelchairs and electric carts are available inside the Haram for Tawaf and Sa'i, which can help your mother on busy days.</p>
       </div>
+    </div>
+  </section>
+  <section data-view="madinah" id="madinah" hidden>
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Ziyarat · المدينة المنورة</p>
+        <h2>Your visit to Madinah</h2>
+        <p>Madinah is not part of the Umrah and needs no Ihram. These steps follow a typical visit, with the duas for each place. Go at your own pace: there is no fixed order.</p>
+      </div>
+      <div class="guide-note"><p>Everyday duas for forgiveness, parents, family and stress are in the Umrah guide under More duas.</p><a class="ghost" href="#more-duas">Open More duas</a></div>
+      <div class="timeline" id="mSteps"></div>
+    </div>
+  </section>
+
+  <section data-view="madinah" id="madinah-places" style="background:var(--surface-2)" hidden>
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Ziyarat</p>
+        <h2>Places and etiquette in Madinah</h2>
+        <p>Rawdah visits need a permit booked in the Nusuk app; women have separate times.</p>
+      </div>
+      <div id="mPlaceList"></div>
     </div>
   </section>
 </main>
@@ -890,6 +920,31 @@ const STEPS = [
   call:"Umrah Mubarak! There is no special dua for cutting hair. Thank Allah for this blessing and make dua for your family.",duas:[]}
 ];
 
+const MSTEPS = [
+ {t:"Arriving in Madinah",p:"Al-Madinah al-Munawwarah, the city of the Prophet ﷺ",
+  b:"Come with love, humility and plenty of durood. No Ihram is needed for Madinah. If you go from Madinah to Makkah for Umrah, put on Ihram at Dhul Hulaifah (Abyar Ali) on the way.",
+  tips:["Keep wudu, smell pleasant and dress decently","Send abundant durood on the Prophet ﷺ"],duas:["madinahArrive","madinahEnter","durood"]},
+ {t:"Entering Masjid an-Nabawi",p:"Any gate · Bab al-Salam leads towards the blessed grave",
+  b:"Enter with the right foot and say an entry dua, then pray 2 rak'ahs Tahiyyat al-Masjid. One prayer here is better than a thousand elsewhere, except Masjid al-Haram.",
+  tips:["Speak softly, don't step over people, and don't pray in walkways","Women have separate gates and prayer areas"],duas:["madinahHaram","enter","enterAlt","exit"]},
+ {t:"Salam to the Prophet ﷺ and his two Companions",p:"At the blessed grave",
+  b:"Walk past the grave calmly, face it and give salam in a low voice. Then take one step to the right for Abu Bakr (RA) and one more for Umar (RA). For your own dua, step aside and face the qiblah.",
+  tips:["Women can visit the area near the grave at set times; ask at the women's section","Give the salam of family and friends who asked you"],duas:["salam","salamFull","salamShahada","salamOthers","abuBakr","umar"]},
+ {t:"Pray in the Rawdah",p:"Between the Prophet's ﷺ house and minbar · the green carpet",
+  b:"The Rawdah is a garden of Paradise. Pray 2 rak'ahs there and make dua, gently and without pushing anyone.",
+  tips:["Book a Rawdah permit in the Nusuk app; slots go quickly","Women have separate Rawdah times","Keep your permit QR code ready and arrive early"],duas:[]},
+ {t:"Jannat al-Baqi",p:"Beside Masjid an-Nabawi",
+  b:"The resting place of many of the Prophet's ﷺ family and Companions. Give salam, pray for their forgiveness, and ask Allah to join you with them.",
+  tips:["Usually open for men after Fajr and after Asr","Women can make the same dua from outside"],duas:["baqi","gravesAlt","janazah"]},
+ {t:"Masjid Quba",p:"About 5 km south of Masjid an-Nabawi",
+  b:"The first mosque built in Islam. Make wudu at your hotel, go to Quba and pray 2 rak'ahs: the Prophet ﷺ said this carries the reward of an Umrah.",
+  tips:["The Prophet ﷺ used to visit Quba every Saturday","Taxis and buses run from near Masjid an-Nabawi"],duas:[]},
+ {t:"Mount Uhud and the martyrs",p:"About 5 km north of Masjid an-Nabawi",
+  b:"Site of the Battle of Uhud. Give salam to the martyrs, including Hamzah (RA), the Prophet's ﷺ uncle, and pray for them with the Baqi dua above.",duas:[]},
+ {t:"More places to visit",p:"Ziyarat tours often cover these in one morning",
+  b:"Masjid al-Qiblatayn, where the qiblah changed from Jerusalem to Makkah; the Seven Mosques near the site of the Battle of the Trench; and the date farms of Madinah.",duas:[]}
+];
+
 const PLACES = [
  {city:"Makkah",ar:"مَكَّةُ الْمُكَرَّمَةُ",cls:"",items:[
   ["Hajar al-Aswad","الْحَجَرُ الْأَسْوَدُ","The Black Stone. Start and end point of every Tawaf round. Say Allahu Akbar when you face it."],
@@ -941,15 +996,17 @@ function idbPut(k,v){try{if(idb)idb.transaction("rec","readwrite").objectStore("
 function idbDel(k){try{if(idb)idb.transaction("rec","readwrite").objectStore("rec").delete(k)}catch(e){}}
 
 /* ---------------- render ---------------- */
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/ﷺ/g,'<span class="saw">ﷺ</span>');
 const ICON_PLAY='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
 const ICON_STOP='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
 const ICON_MIC='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg>';
 const ICON_EXP='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
 
+const seenCards=new Set();
 function card(d){
   const tagCls = d.tag==="Sunnah"||d.tag==="Quran" ? "badge sunnah":"badge";
-  return `<article class="dua reveal${REC[d.id]?" has-rec":""}${AUDIO[d.id]?"":" no-audio"}" id="dua-${d.id}" data-id="${d.id}">
+  const first=!seenCards.has(d.id); seenCards.add(d.id);   // a dua can appear in both guides; only the first copy gets the id
+  return `<article class="dua reveal${REC[d.id]?" has-rec":""}${AUDIO[d.id]?"":" no-audio"}"${first?` id="dua-${d.id}"`:""} data-id="${d.id}">
    <div class="dua-top"><div><h4>${esc(d.title)}</h4><p class="when">${esc(d.when)}</p></div>
     <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="${tagCls}">${esc(d.tag)}</span><span class="badge rec-badge">Recorded voice</span></div></div>
    <div class="ar" lang="ar">${d.lines.map((l,i)=>`<span class="ln" data-i="${i}">${l.ar}</span>`).join("")}</div>
@@ -969,28 +1026,39 @@ function card(d){
   </article>`;
 }
 
-const stepsEl=document.getElementById("steps");
-stepsEl.innerHTML = STEPS.map((s,i)=>`<div class="step" id="step-${i+1}">
+function stepsHTML(list,prefix){
+  return list.map((s,i)=>`<div class="step" id="${prefix}-${i+1}">
   <span class="num" aria-hidden="true">${i+1}</span>
-  <div class="step-head reveal"><p class="eyebrow">Step ${i+1} of ${STEPS.length}</p><h3>${esc(s.t)}</h3><p class="place">${esc(s.p)}</p></div>
+  <div class="step-head reveal"><p class="eyebrow">Step ${i+1} of ${list.length}</p><h3>${esc(s.t)}</h3><p class="place">${esc(s.p)}</p></div>
   <div class="step-body reveal"><p>${esc(s.b)}</p>
    ${s.tips?`<ul class="tips">${s.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:""}
    ${s.call?`<p class="callout">${esc(s.call)}</p>`:""}</div>
   ${s.duas.length?`<div class="duas">${s.duas.map(id=>card(byId[id])).join("")}</div>`:""}
   ${s.more?`<h4 class="more-h">${esc(s.more.h)}</h4>${s.more.p?`<p class="more-p">${esc(s.more.p)}</p>`:""}<div class="duas">${s.more.ids.map(id=>card(byId[id])).join("")}</div>`:""}
 </div>`).join("");
+}
+document.getElementById("steps").innerHTML = stepsHTML(STEPS,"step");
 
 document.getElementById("generalDuas").innerHTML = D.filter(d=>d.g).map(card).join("");
+document.getElementById("mSteps").innerHTML = stepsHTML(MSTEPS,"mstep");
 
-document.getElementById("placeList").innerHTML = PLACES.map(c=>`<div class="city ${c.cls}">
+const cityHTML = c=>`<div class="city ${c.cls}">
   <h3>${c.city} <span lang="ar">${c.ar}</span></h3>
   <div class="places">${c.items.map(p=>`<div class="place-card reveal"><p class="pa">${p[1]}</p><h4>${esc(p[0])}</h4><p>${esc(p[2])}</p></div>`).join("")}</div>
   ${c.notes?`<div class="two">${c.notes.map(([h,l])=>`<div class="panel"><h3>${esc(h)}</h3><ul>${l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div>`:""}
-  ${c.city==="Madinah"?`<div class="duas">${D.filter(d=>d.m).map(card).join("")}</div>`:""}
-</div>`).join("");
+</div>`;
+document.getElementById("placeList").innerHTML = PLACES.filter(c=>c.city==="Makkah").map(cityHTML).join("");
+document.getElementById("mPlaceList").innerHTML = PLACES.filter(c=>c.city==="Madinah").map(cityHTML).join("");
 
 /* order used by practice mode */
-const ORDER = [...STEPS.flatMap(s=>[...s.duas,...(s.more?s.more.ids:[])]), ...D.filter(d=>d.g).map(d=>d.id), ...D.filter(d=>d.m).map(d=>d.id)];
+const stepIds = list => list.flatMap(s=>[...s.duas,...(s.more?s.more.ids:[])]);
+const ORDERS = {
+  umrah:[...stepIds(STEPS), ...D.filter(d=>d.g).map(d=>d.id)],
+  madinah:[...new Set(stepIds(MSTEPS))]
+};
+let view="umrah";
+/* the practice list follows the open guide; a dua opened from the other guide uses that guide's list */
+const orderFor = id => ORDERS[view].includes(id) ? ORDERS[view] : (ORDERS.umrah.includes(id) ? ORDERS.umrah : ORDERS.madinah);
 
 /* ---------------- settings UI ---------------- */
 function syncSegs(){
@@ -1163,7 +1231,7 @@ document.addEventListener("click",e=>{
   const b=e.target.closest(".dua [data-act]"); if(!b) return;
   const id=b.closest(".dua").dataset.id, act=b.dataset.act;
   if(act==="play"){ if(session&&session.id===id) stop(); else play(id); }
-  if(act==="practice") openPractice(ORDER.indexOf(id));
+  if(act==="practice") openPractice(id);
   if(act==="rec") toggleRecPanel(b.closest(".dua"));
 });
 
@@ -1209,12 +1277,12 @@ document.getElementById("fileIn").addEventListener("change",e=>{
 function saveRec(id,blob){REC[id]=blob; idbPut(id,blob); cardsFor(id).forEach(x=>x.classList.add("has-rec"))}
 
 /* ---------------- practice mode ---------------- */
-const P={el:document.getElementById("practice"),i:0,lock:null};
+const P={el:document.getElementById("practice"),i:0,lock:null,list:[]};
 const pAr=document.getElementById("pAr"),pRo=document.getElementById("pRo"),pUr=document.getElementById("pUr"),pEn=document.getElementById("pEn"),pTitle=document.getElementById("pTitle"),pMeta=document.getElementById("pMeta"),pPlay=document.getElementById("pPlay");
 function renderPractice(){
-  const d=byId[ORDER[P.i]];
+  const d=byId[P.list[P.i]];
   P.el.classList.toggle("long", d.lines.length>3 || d.lines.reduce((a,l)=>a+l.ar.length,0)>120);
-  pTitle.innerHTML=esc(d.title)+`<small>${P.i+1} of ${ORDER.length} · ${esc(d.when)}</small>`;
+  pTitle.innerHTML=esc(d.title)+`<small>${P.i+1} of ${P.list.length} · ${esc(d.when)}</small>`;
   pAr.innerHTML=d.lines.map((l,i)=>`<span class="ln" data-i="${i}">${l.ar}</span>`).join("");
   pRo.innerHTML=d.lines.map((l,i)=>`<span class="ln" data-i="${i}">${esc(l.ro)}</span>`).join("");
   pRo.hidden=!S.ro; pUr.hidden=!S.ur; pEn.hidden=!S.en;
@@ -1225,22 +1293,22 @@ function renderPractice(){
 }
 function setPIcon(on){pPlay.classList.toggle("on",on);pPlay.setAttribute("aria-label",on?"Stop":"Play");
   document.getElementById("pPlayIcon").innerHTML=on?'<rect x="6" y="6" width="12" height="12" rx="2"/>':'<path d="M8 5v14l11-7z"/>'}
-async function openPractice(i){
-  stop(); P.i=Math.max(0,i); renderPractice(); P.el.hidden=false; document.body.style.overflow="hidden";
+async function openPractice(id){
+  stop(); P.list=orderFor(id); P.i=Math.max(0,P.list.indexOf(id)); renderPractice(); P.el.hidden=false; document.body.style.overflow="hidden";
   try{P.lock=await navigator.wakeLock.request("screen")}catch(e){P.lock=null}
 }
 function closePractice(){stop();P.el.hidden=true;document.body.style.overflow="";try{P.lock&&P.lock.release()}catch(e){}}
-function go(dir){stop();P.i=(P.i+dir+ORDER.length)%ORDER.length;renderPractice()}
+function go(dir){stop();P.i=(P.i+dir+P.list.length)%P.list.length;renderPractice()}
 document.getElementById("pClose").onclick=closePractice;
 document.getElementById("pPrev").onclick=()=>go(-1);
 document.getElementById("pNext").onclick=()=>go(1);
-pPlay.onclick=()=>{const id=ORDER[P.i]; if(session&&session.id===id) stop(); else play(id)};
-document.getElementById("startPractice").onclick=()=>openPractice(ORDER.indexOf("talbiyah"));
+pPlay.onclick=()=>{const id=P.list[P.i]; if(session&&session.id===id) stop(); else play(id)};
+document.getElementById("startPractice").onclick=()=>openPractice(view==="madinah"?"salam":"talbiyah");
 document.addEventListener("keydown",e=>{if(P.el.hidden)return;if(e.key==="Escape")closePractice();if(e.key==="ArrowRight")go(1);if(e.key==="ArrowLeft")go(-1);if(e.key===" "){e.preventDefault();pPlay.click()}});
 let tx=null;P.el.addEventListener("touchstart",e=>{tx=e.touches[0].clientX},{passive:true});
 P.el.addEventListener("touchend",e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>70)go(dx<0?1:-1);tx=null},{passive:true});
 views.add((ev,s,x)=>{
-  if(P.el.hidden||s.id!==ORDER[P.i]) return;
+  if(P.el.hidden||s.id!==P.list[P.i]) return;
   if(ev==="start"){setPIcon(true);pMeta.textContent="Listening…"}
   if(ev==="line"){[pAr,pRo].forEach(el=>el.querySelectorAll(".ln").forEach(l=>l.classList.toggle("on",x===-1||+l.dataset.i===x)));
     const cur=x>=0&&pAr.querySelector(`.ln[data-i="${x}"]`); if(cur) cur.scrollIntoView({block:"center",behavior:"smooth"});}
@@ -1335,8 +1403,36 @@ updCheck();
 })();
 
 /* ---------------- jump to #section after content is built ---------------- */
-function toHash(){const h=location.hash.slice(1);const el=h&&document.getElementById(h);if(el)el.scrollIntoView({behavior:"auto",block:"start"})}
-if(location.hash){toHash();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(toHash);}
+/* ---------------- two guides: Umrah and Madinah ---------------- */
+const NAV = {
+  umrah:[["#journey","Steps"],["#more-duas","More duas"],["#counter","Counter"],["#places","Makkah places"],["#prepare","Ihram & checklist"]],
+  madinah:[["#madinah","Madinah steps"],["#madinah-places","Places & etiquette"]]
+};
+function setView(v){
+  view = v==="madinah" ? "madinah" : "umrah";
+  document.querySelectorAll("[data-view]").forEach(sec=>{ sec.hidden = sec.dataset.view!==view; });
+  document.querySelectorAll(".view-switch [data-go]").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.go===view)));
+  document.getElementById("navLinks").innerHTML = NAV[view].map(([h,t])=>`<a href="${h}">${esc(t)}</a>`).join("");
+  ls.set("view",view);
+}
+function viewOf(id){ const el=id&&document.getElementById(id); const sec=el&&el.closest("[data-view]"); return sec?sec.dataset.view:null; }
+function route(scroll){
+  const h=location.hash.slice(1);
+  const v = (h==="umrah"||h==="madinah") ? h : (viewOf(h) || ls.get("view","umrah"));
+  if(v!==view) stop();
+  setView(v);
+  if(!scroll) return;
+  const target = (h==="umrah"||h==="madinah") ? document.querySelector(`[data-view="${view}"]:not([hidden])`) : document.getElementById(h);
+  if(target) target.scrollIntoView({behavior:"auto",block:"start"});
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-go]"); if(!b) return;
+  e.preventDefault();
+  if(location.hash==="#"+b.dataset.go) route(true); else location.hash=b.dataset.go;
+});
+addEventListener("hashchange",()=>route(true));
+route(!!location.hash);
+if(location.hash&&document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>route(true));
 
 /* ---------------- boot recordings ---------------- */
 openDB().then(db=>{idb=db;return idbAll()}).then(()=>{Object.keys(REC).forEach(id=>cardsFor(id).forEach(c=>c.classList.add("has-rec")))});
