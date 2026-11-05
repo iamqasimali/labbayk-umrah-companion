@@ -246,6 +246,94 @@ body.hide-ro .ro, body.hide-ur .ur, body.hide-en .en{display:none}
 .kmap-legend a{font-size:.88rem;font-weight:600}
 @media (max-width:720px){.kmap{grid-template-columns:1fr}.kmap-fig{position:static}}
 @media (prefers-reduced-motion: reduce){.km-walker{display:none}}
+/* guided Tawaf / Sa'i: a dark, full-screen companion used while walking */
+.g-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.g-opt{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center;text-align:left;background:var(--kiswa);color:#efe7d2;border:1px solid rgba(226,192,109,.35);border-radius:18px;padding:18px;min-height:96px}
+.g-opt svg{grid-row:span 2}
+.g-opt b{font-family:var(--f-display);font-weight:400;font-size:1.35rem;color:#e2c06d}
+.g-opt small{color:#a9a28f;font-size:.9rem;line-height:1.4}
+.g-opt:hover{border-color:#e2c06d}
+.g-launch{margin-top:6px}
+.guided{position:fixed;inset:0;z-index:100;background:var(--kiswa);color:#efe7d2;display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top,0px) + 10px) max(14px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 12px) max(14px,env(safe-area-inset-left,0px))}
+.guided[hidden]{display:none!important}
+.g-top{display:flex;align-items:center;gap:10px}
+.g-ttl{flex:1;min-width:0;text-align:center;display:grid}
+.g-ttl b{font-family:var(--f-display);font-weight:400;color:#e2c06d;font-size:1.15rem}
+.g-ttl small{color:#a9a28f;font-size:.85rem}
+.g-menu{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:center;padding:10px 0;border-bottom:1px solid rgba(226,192,109,.2)}
+.g-menu>span{font-size:.8rem;color:#a9a28f;text-transform:uppercase;letter-spacing:.08em}
+.g-menu .seg{background:rgba(255,255,255,.07)}
+.g-menu .seg button{color:#a9a28f;flex:0 0 auto;padding:8px 14px}
+.g-menu .seg button[aria-pressed="true"]{background:#2a2c2e;color:#f3d27e}
+.g-restart{color:#efe7d2;border-color:rgba(226,192,109,.35)}
+.g-map{flex:none;display:grid;justify-items:center;gap:6px;padding-top:6px}
+.g-map svg{width:min(100%,46vh,330px);height:auto;display:block}
+.g-pips{display:flex;gap:6px;align-items:center;font-size:.78rem;color:#a9a28f}
+.g-pip{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1.5px solid rgba(226,192,109,.35);color:#a9a28f;font-weight:700;font-variant-numeric:tabular-nums}
+.g-pip.done{background:#c9a54d;border-color:#c9a54d;color:#141210}
+.g-pip.now{border-color:#f3d27e;color:#f3d27e;box-shadow:0 0 0 3px rgba(226,192,109,.2)}
+.g-body{flex:1;min-height:0;overflow-y:auto;padding:10px 2px 14px;display:grid;align-content:start;grid-auto-rows:max-content;gap:8px;
+  -webkit-mask-image:linear-gradient(transparent,#000 14px,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(transparent,#000 14px,#000 calc(100% - 18px),transparent)}
+.g-where{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#c9a54d;font-weight:700}
+.g-stop{font-family:var(--f-display);font-weight:400;font-size:1.5rem;color:#f5ecd2}
+.g-note{color:#cfc6ae;font-size:.98rem;max-width:62ch}
+.g-chips{display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;min-height:max-content;scrollbar-width:none;padding-bottom:2px}
+.g-chips::-webkit-scrollbar{display:none}
+.g-chip{flex:none;border:1px solid rgba(226,192,109,.35);background:transparent;color:#cfc6ae;border-radius:999px;padding:7px 12px;font-size:.85rem;font-weight:600;white-space:nowrap}
+.g-chip[aria-selected="true"]{background:#c9a54d;border-color:#c9a54d;color:#141210}
+.g-dua{display:grid;gap:10px;background:rgba(255,255,255,.04);border:1px solid rgba(226,192,109,.18);border-radius:16px;padding:14px;text-align:center}
+.g-dua .p-ar{font-size:calc(var(--ar-size) * 1.1)}
+.g-dua .p-ro{font-size:calc(var(--ar-size) * .52)}
+.g-dua .p-ur{font-size:calc(var(--ar-size) * .5)}
+.g-dua .p-en{font-size:.92rem}
+.g-dua .src{color:#a9a28f}
+.g-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.g-play{width:64px;height:64px;border-radius:50%;border:0;background:#c9a54d;color:#141210;display:grid;place-items:center;flex:none}
+.g-play[disabled]{opacity:.35}
+.g-play.on{animation:pulse 1.6s infinite}
+.g-meta{color:#a9a28f;font-size:.9rem;min-width:9ch}
+.g-meta b{color:#f3d27e}
+.g-row .seg{background:rgba(255,255,255,.07)}
+.g-row .seg button{color:#a9a28f;flex:0 0 auto;padding:7px 12px}
+.g-row .seg button[aria-pressed="true"]{background:#2a2c2e;color:#f3d27e}
+.g-free{color:#cfc6ae;padding:6px}
+.g-bottom{display:flex;gap:10px;align-items:center;padding-top:8px}
+.g-next{flex:1;min-height:64px;border:0;border-radius:18px;background:#c9a54d;color:#141210;font-weight:700;font-size:1.05rem;padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;line-height:1.25}
+.g-next:active{transform:scale(.98)}
+/* map drawing */
+.gm-ring{fill:none;stroke:rgba(255,255,255,.12);stroke-width:26}
+.gm-rabbana{fill:none;stroke:#c9a54d;stroke-width:26;opacity:.35}
+.gm-kaaba{fill:#060707;stroke:#c9a54d;stroke-width:1.5}
+.gm-band{fill:none;stroke:#c9a54d;stroke-width:2.5}
+.gm-door{stroke:#e2c06d;stroke-width:4;stroke-linecap:round}
+.gm-hijr{fill:none;stroke:#8d8775;stroke-width:2.5}
+.gm-start{stroke:#5cb88f;stroke-width:2.5;stroke-dasharray:5 4}
+.gm-stone{fill:#2b2b2b;stroke:#e2c06d;stroke-width:2}
+.gm-maqam{fill:#e2c06d}
+.gm-zamzam{fill:#3d8fd1}
+.gm-dir{fill:none;stroke:#8d8775;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.gm-t{font:600 9.5px var(--f-body);fill:#a9a28f}
+.gm-t.on{fill:#f3d27e}
+.gm-masa{fill:rgba(255,255,255,.06);stroke:rgba(226,192,109,.3)}
+.gm-green{fill:#5cb88f;opacity:.8}
+.gm-hill{fill:#c9a54d;opacity:.85}
+.gm-head{stroke:#f3d27e;stroke-width:2.5;stroke-dasharray:5 5;fill:none}
+.gm-me{fill:#f3d27e;stroke:#141210;stroke-width:2.5}
+.gm-pulse{fill:none;stroke:#f3d27e;stroke-width:2;opacity:.6;animation:gmPulse 1.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes gmPulse{from{transform:scale(.6);opacity:.8}to{transform:scale(1.7);opacity:0}}
+@media (min-width:860px){
+  .guided{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);grid-template-rows:auto auto 1fr auto;column-gap:28px}
+  .guided[hidden]{display:none!important}
+  .g-top,.g-menu,.g-bottom{grid-column:1/-1}
+  .g-top{grid-row:1}.g-menu{grid-row:2}.g-bottom{grid-row:4}
+  .g-map{grid-row:3;align-content:center}
+  .g-map svg{width:min(100%,62vh)}
+  .g-body{grid-row:3}
+}
+@media (max-width:560px){.g-options{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.gm-pulse,.g-play.on{animation:none}}
+
 .saw{font-family:var(--f-ar);font-size:1.15em;line-height:1;font-style:normal}
 .more-p{color:var(--muted);max-width:65ch;margin-top:-8px}
 .check label{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer}
@@ -467,9 +555,14 @@ footer a{color:#e2c06d}
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">In the Haram</p>
-        <h2>Round counter</h2>
-        <p>Tap the gold button each time you reach the Black Stone (Tawaf) or arrive at Safa or Marwah (Sa'i). It remembers the count if the screen locks.</p>
+        <h2>Tawaf and Sa'i, step by step</h2>
+        <p>Open a guide when you start. It shows where you are on the map and the dua for that spot, with the recitation. Tap Next as you walk: your rounds are counted and saved even if the screen locks.</p>
       </div>
+      <div class="g-options">
+        <button type="button" class="g-opt" data-guided="tawaf"><svg width="44" height="44" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="#c9a54d" stroke-width="2" stroke-dasharray="4 4"/><rect x="14" y="14" width="20" height="20" fill="#060707" stroke="#c9a54d" stroke-width="1.5" transform="rotate(45 24 24)"/><circle cx="45" cy="24" r="3" fill="#f3d27e"/></svg><b>Guided Tawaf</b><small data-guided-status="tawaf">7 rounds · map · the dua for each corner</small></button>
+        <button type="button" class="g-opt" data-guided="sai"><svg width="44" height="44" viewBox="0 0 48 48" aria-hidden="true"><rect x="17" y="4" width="14" height="40" rx="5" fill="none" stroke="#c9a54d" stroke-width="2"/><rect x="17" y="20" width="14" height="3" fill="#5cb88f"/><rect x="17" y="26" width="14" height="3" fill="#5cb88f"/><path d="M15,44 q9,-9 18,0z M15,4 q9,9 18,0z" fill="#c9a54d"/><circle cx="24" cy="34" r="3.5" fill="#f3d27e"/></svg><b>Guided Sa'i</b><small data-guided-status="sai">7 trips · map · duas for Safa, Marwah and walking</small></button>
+      </div>
+      <p class="more-p" style="margin:0 0 10px">Prefer a simple counter? Use the one below.</p>
       <div class="counter">
         <svg id="kaabaRing" viewBox="0 0 260 260" role="img" aria-label="Round progress"></svg>
         <div class="side">
@@ -618,6 +711,41 @@ footer a{color:#e2c06d}
       <div class="seg" data-setting="repeat"><button type="button" data-v="1">1×</button><button type="button" data-v="3">3×</button><button type="button" data-v="0">Non-stop</button></div>
       <div class="seg" data-setting="gap"><button type="button" data-v="0">No pause</button><button type="button" data-v="turn">Her turn</button></div>
     </div>
+  </div>
+</div>
+
+<!-- guided Tawaf / Sa'i -->
+<div class="guided" id="guided" hidden role="dialog" aria-modal="true" aria-labelledby="gTitle">
+  <div class="g-top">
+    <button class="icon-btn" id="gClose" type="button" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="g-ttl"><b id="gTitle">Guided Tawaf</b><small id="gProg"></small></div>
+    <button class="icon-btn" id="gMenuBtn" type="button" aria-label="Options" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+    </button>
+  </div>
+  <div class="g-menu" id="gMenu" hidden>
+    <span>Duas to show</span>
+    <div class="seg" id="gMode"><button type="button" data-v="full">Book duas</button><button type="button" data-v="sunnah">Sunnah only</button></div>
+    <button class="ghost g-restart" id="gRestart" type="button">Start again</button>
+  </div>
+  <div class="g-map">
+    <svg id="gSvg" viewBox="0 0 300 300" aria-hidden="true"></svg>
+    <div class="g-pips" id="gPips" aria-hidden="true"></div>
+  </div>
+  <div class="g-body" id="gBody">
+    <p class="g-where" id="gWhere"></p>
+    <h3 class="g-stop" id="gStop"></h3>
+    <p class="g-note" id="gNote"></p>
+    <div class="g-chips" id="gChips" role="tablist" aria-label="Duas for this spot"></div>
+    <div class="g-dua" id="gDua"></div>
+  </div>
+  <div class="g-bottom">
+    <button class="icon-btn" id="gBack" type="button" aria-label="Back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <button class="g-next" id="gNext" type="button"></button>
   </div>
 </div>
 
@@ -981,7 +1109,7 @@ const STEPS = [
    "There is no fixed dua for each round: Quran, dhikr, durood or your own duas in any language, in a low voice",
    "If wudu breaks, make wudu again. Before 4 rounds are done, start the Tawaf again; after 4 rounds, continue where you stopped",
    "Women: avoid the crowded area near the Kaaba and use the upper floors if needed. No Tawaf during menstruation",
-   "See the Kaaba map (top bar) for where each corner is","Use the round counter below so you don't lose count"],duas:["tawafNiyyahDua","tawafStart","rabbana"],
+   "See the Kaaba map (top bar) for where each corner is","Use the round counter below so you don't lose count"],guide:"tawaf",duas:["tawafNiyyahDua","tawafStart","rabbana"],
   more:{h:"Duas taught for each part of the Tawaf (optional)",p:"Many Umrah books teach a dua for each corner. They are not required: the only Sunnah dua with a fixed place is Rabbana atina between Rukn al-Yamani and the Black Stone. Say whatever you can, or your own duas.",ids:["afterIstilam","imanan","hadhalBayt","rabbalBayt","ruknIraqi","mizab","ruknShami","ruknYamani","rabbanaAdkhilna"]}},
  {t:"Two rak'ahs at Maqam Ibrahim",p:"Behind Maqam Ibrahim, or anywhere in the Haram",
   b:"After the seventh round and the last istilam, cover both shoulders. Pray two rak'ahs behind or near Maqam Ibrahim, or anywhere in the Haram if it is crowded: Surah al-Kafirun in the first and al-Ikhlas in the second. If it is a makruh time, wait.",
@@ -995,7 +1123,7 @@ const STEPS = [
    "Don't take long breaks between trips without a reason, and avoid idle talk",
    "After the seventh trip at Marwah, face the Kaaba and make dua. Two nafl in the Haram afterwards are optional",
    "Electric carts and wheelchairs are available for elderly pilgrims"],call:"On Safa and Marwah, facing the Kaaba: 1. Climb up and face the Kaaba. 2. Raise both hands as in dua. 3. Say the dhikr (Allahu Akbar ×3, La ilaha illallah…). 4. Make your own dua. 5. Repeat the dhikr and dua 3 times. Do this at the start on Safa and each time you arrive at Marwah or Safa: 8 stops in all. The Quran ayah is only said once, before the first trip.",
-  duas:["safaVerse","safaDhikr","safaDhikrFull","betweenSafaMarwah","saiDua","saiDuaFull"],
+  guide:"sai",duas:["safaVerse","safaDhikr","safaDhikrFull","betweenSafaMarwah","saiDua","saiDuaFull"],
   more:{h:"More duas to make while walking (also good in Tawaf)",ids:["taqabbal","ibrahimDua","tuzigh","zalamna","sayyid","jannah","afiyah","yaHayyu","ainni"]}},
  {t:"Halq or Taqsir: finishing Umrah",p:"Barber shops outside Marwah gate",
   b:"Men shave the whole head (best), or shorten the hair evenly by about an inch (a finger joint). Women gather their hair and cut about an inch from the end; women do not shave. Do this inside the Haram boundaries. Your Umrah is complete and the restrictions of Ihram are lifted.",
@@ -1114,7 +1242,8 @@ function stepsHTML(list,prefix){
   <div class="step-head reveal"><p class="eyebrow">Step ${i+1} of ${list.length}</p><h3>${esc(s.t)}</h3><p class="place">${esc(s.p)}</p></div>
   <div class="step-body reveal"><p>${esc(s.b)}</p>
    ${s.tips?`<ul class="tips">${s.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:""}
-   ${s.call?`<p class="callout">${esc(s.call)}</p>`:""}</div>
+   ${s.call?`<p class="callout">${esc(s.call)}</p>`:""}
+   ${s.guide?`<button type="button" class="btn btn-gold g-launch" data-guided="${s.guide}">${s.guide==="tawaf"?"Open Guided Tawaf":"Open Guided Sa'i"} ›</button>`:""}</div>
   ${s.duas.length?`<div class="duas">${s.duas.map(id=>card(byId[id])).join("")}</div>`:""}
   ${s.more?`<h4 class="more-h">${esc(s.more.h)}</h4>${s.more.p?`<p class="more-p">${esc(s.more.p)}</p>`:""}<div class="duas">${s.more.ids.map(id=>card(byId[id])).join("")}</div>`:""}
 </div>`).join("");
@@ -1447,6 +1576,249 @@ cReset.onclick=()=>{if(!resetArm){resetArm=true;cReset.textContent="Tap again to
 document.getElementById("cDua").onclick=()=>{const id=C.mode==="tawaf"?"rabbana":"safaDhikr"; if(session&&session.id===id)stop(); else play(id)};
 drawCounter();
 
+/* ---------------- guided Tawaf and Sa'i ---------------- */
+/* A route of stops; each stop has a place on the map and the duas for that spot.
+   The pilgrim taps Next as they walk; rounds/trips are counted and saved automatically. */
+const G = { el:document.getElementById("guided"), kind:"tawaf", T:[], i:0, sel:0, lock:null, pos:null, anim:0 };
+const GS = Object.assign({mode:"full", tawaf:0, sai:0}, ls.get("guided",{}));
+const saveG = () => ls.set("guided", GS);
+
+function buildTawaf(full){
+  const T=[];
+  for(let r=1;r<=7;r++){
+    T.push({r,k:"stone",a:0,where:"Hajar al-Aswad",t:r===1?"Start at the Black Stone":"At the Black Stone",
+      note:r===1?"Stand in line with the Black Stone (the green light on the wall), facing it. Make your intention, raise your hands towards it with palms facing it, say the takbir, kiss your palms if you wish, and start walking with the Kaaba on your left.":"Face the Black Stone, raise your hands and say the takbir, then keep walking.",
+      duas:r===1&&full?["tawafNiyyahDua","tawafStart"]:["tawafStart"]});
+    if(full){
+      T.push({r,k:"door",a:38,where:"Kaaba door · Multazam",t:"Past the door and the Multazam",note:"Make any dua. These are taught for the first part of each round.",duas:r===1?["afterIstilam","imanan","hadhalBayt","rabbalBayt"]:["hadhalBayt","rabbalBayt","afterIstilam"]});
+      T.push({r,k:"iraqi",a:90,where:"Corner 2",t:"Rukn al-Iraqi",note:"The first corner after the Black Stone.",duas:["ruknIraqi"]});
+      T.push({r,k:"mizab",a:135,where:"Hijr Ismail",t:"Hijr Ismail and the Mizab",note:"Stay outside the low semicircular wall: it is part of the Kaaba. The golden spout above is the Mizab.",duas:["mizab"]});
+      T.push({r,k:"shami",a:180,where:"Corner 3",t:"Rukn al-Shami",note:"The third corner.",duas:["ruknShami"]});
+      T.push({r,k:"yamani",a:265,where:"Corner 4",t:"Rukn al-Yamani",note:"Touch it with your right hand if you can. If it is crowded, pass by without pointing.",duas:["ruknYamani"]});
+      T.push({r,k:"rabbana",a:318,where:"Rukn al-Yamani → Black Stone",t:"Rabbana atina",note:"The Sunnah dua for this stretch, in every round.",duas:["rabbana","rabbanaAdkhilna"]});
+    } else {
+      T.push({r,k:"walk",a:120,where:"Around the Kaaba",t:"Walking with the Kaaba on your left",note:"There is no fixed dua here. Recite Quran, dhikr, durood or your own duas in any language, in a low voice. Some recorded duas you can use:",duas:["forgive","jannah","afiyah","istighfar","durood"]});
+      T.push({r,k:"yamani",a:265,where:"Corner 4",t:"Rukn al-Yamani",note:"Touch it with your right hand if you can. If it is crowded, pass by without pointing. No dua is required here.",duas:[]});
+      T.push({r,k:"rabbana",a:318,where:"Rukn al-Yamani → Black Stone",t:"Rabbana atina",note:"The Sunnah dua for this stretch, in every round.",duas:["rabbana"]});
+    }
+  }
+  T.push({r:8,k:"end",a:360,where:"Hajar al-Aswad",t:"Tawaf complete",note:"Back at the Black Stone: raise your hands and say the takbir once more (the 8th istilam). Men cover both shoulders now.",duas:["tawafStart"]});
+  T.push({r:8,k:"maqam",pt:[186,98],where:"Maqam Ibrahim",t:"Two rak'ahs",note:"Pray 2 rak'ahs behind Maqam Ibrahim, or anywhere in the Haram if it is crowded: Surah al-Kafirun in the first, al-Ikhlas in the second.",duas:["maqam"]});
+  T.push({r:8,k:"zamzam",pt:[204,184],where:"Zamzam",t:"Drink Zamzam",note:"Face the Kaaba, drink, and make dua for anything you need.",duas:["zamzam","zamzam2"],last:true});
+  return T;
+}
+function buildSai(full){
+  const T=[{r:0,k:"approach",pt:[150,288],where:"Before the first trip",t:"Approaching Safa",note:"Recite the ayah once as you come near Safa, then climb Safa until you can see the Kaaba.",duas:["safaVerse"]}];
+  const walk = full?["betweenSafaMarwah","saiDuaFull","taqabbal","ibrahimDua","jannah","afiyah","yaHayyu","sayyid"]:["taqabbal","ibrahimDua","jannah","afiyah","yaHayyu","sayyid"];
+  const hill = full?["safaDhikr","safaDhikrFull"]:["safaDhikr"];
+  for(let r=1;r<=7;r++){
+    const from=r%2?"Safa":"Marwah", to=r%2?"Marwah":"Safa";
+    T.push({r,k:"hill",at:from,where:from,t:`On ${from}, facing the Kaaba`,note:"Face the Kaaba and raise both hands as in dua. Say the dhikr, then your own dua. Do this 3 times.",duas:hill});
+    T.push({r,k:"walk",at:from,to,where:`${from} → ${to}`,t:`Walking to ${to}`,note:"There is no fixed dua for Sa'i: durood, istighfar or your own duas. These are good while walking:",duas:walk});
+    T.push({r,k:"green",at:from,to,where:"Green lights",t:"Between the green lights",note:"Men jog lightly here; women walk normally.",duas:["saiDua"]});
+  }
+  T.push({r:8,k:"hill",at:"Marwah",where:"Marwah",t:"Sa'i complete",note:"You have finished the 7th trip at Marwah. Face the Kaaba and make the dhikr and your dua once more.",duas:hill});
+  T.push({r:8,k:"hair",pt:[150,36],where:"Finishing Umrah",t:"Cut or shave your hair",note:"Men shave the whole head or shorten the hair evenly; women cut about an inch from the end. Your Umrah is complete. Umrah Mubarak!",duas:[],last:true});
+  return T;
+}
+
+/* ---------- map drawings ---------- */
+const GC=[150,150], GR=112;
+const ringPt = a => [GC[0]+GR*Math.cos(a*Math.PI/180), GC[1]-GR*Math.sin(a*Math.PI/180)];
+function tawafSVG(){
+  return `<circle cx="150" cy="150" r="${GR}" class="gm-ring"/>
+  <path d="M150,${150+GR} A${GR},${GR} 0 0 0 ${150+GR},150" class="gm-rabbana"/>
+  <line x1="186" y1="150" x2="${150+GR+16}" y2="150" class="gm-start"/>
+  <path d="M144,115 C128,82 82,127 115,144" class="gm-hijr"/>
+  <polygon points="150,114 186,150 150,186 114,150" class="gm-kaaba"/>
+  <polyline points="132,132 150,114 168,132" class="gm-band"/>
+  <line x1="170" y1="134" x2="176" y2="140" class="gm-door"/>
+  <circle cx="186" cy="150" r="4" class="gm-stone"/>
+  <rect x="181" y="93" width="10" height="10" rx="2" transform="rotate(45 186 98)" class="gm-maqam"/>
+  <path d="M204,176 q-6,9 0,12 q6,-3 0,-12 z" class="gm-zamzam"/>
+  <path d="M168,${150-GR+1} L150,${150-GR} L164,${150-GR-11}" class="gm-dir"/>
+  <path d="M${150-GR+1},132 L${150-GR},150 L${150-GR+11},136" class="gm-dir"/>
+  <path d="M132,${150+GR-1} L150,${150+GR} L136,${150+GR+11}" class="gm-dir"/>
+  <text x="194" y="164" class="gm-t" data-k="stone end">Black Stone</text>
+  <text x="150" y="108" class="gm-t" text-anchor="middle" data-k="iraqi">Iraqi</text>
+  <text x="84" y="104" class="gm-t" text-anchor="middle" data-k="mizab">Hijr</text>
+  <text x="108" y="153" class="gm-t" text-anchor="end" data-k="shami">Shami</text>
+  <text x="150" y="198" class="gm-t" text-anchor="middle" data-k="yamani">Yamani</text>
+  <text x="196" y="88" class="gm-t" data-k="maqam">Maqam</text>
+  <text x="212" y="196" class="gm-t" data-k="zamzam">Zamzam</text>
+  <path id="gHead" class="gm-head" d=""/>
+  <g id="gMe"><circle r="15" class="gm-pulse"/><circle r="8" class="gm-me"/></g>`;
+}
+function saiSVG(){
+  return `<rect x="118" y="26" width="64" height="248" rx="14" class="gm-masa"/>
+  <rect x="118" y="132" width="64" height="8" class="gm-green"/><rect x="118" y="160" width="64" height="8" class="gm-green"/>
+  <path d="M120,276 q30,-30 60,0 z" class="gm-hill"/><path d="M120,24 q30,30 60,0 z" class="gm-hill"/>
+  <text x="150" y="294" class="gm-t" text-anchor="middle" data-k="Safa">Safa</text>
+  <text x="150" y="14" class="gm-t" text-anchor="middle" data-k="Marwah">Marwah</text>
+  <text x="196" y="153" class="gm-t" data-k="green">Green lights</text>
+  <polygon points="52,136 66,150 52,164 38,150" class="gm-kaaba"/>
+  <text x="52" y="182" class="gm-t" text-anchor="middle">Kaaba</text>
+  <path id="gHead" class="gm-head" d=""/>
+  <g id="gMe"><circle r="15" class="gm-pulse"/><circle r="8" class="gm-me"/></g>`;
+}
+const SAI_Y = {Safa:258, Marwah:42};
+function stopPoint(st){
+  if(st.pt) return st.pt;
+  if(G.kind==="tawaf") return ringPt(st.a);
+  if(st.k==="hill") return [150,SAI_Y[st.at]];
+  const y0=SAI_Y[st.at], y1=SAI_Y[st.to];
+  return [150, st.k==="green" ? 150 : y0+(y1-y0)*0.28];
+}
+function moveMarker(to){
+  const me=document.getElementById("gMe"); if(!me) return;
+  const from=G.pos||to; G.pos=to; cancelAnimationFrame(G.anim);
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const set=p=>me.setAttribute("transform",`translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
+  if(reduce||(from[0]===to[0]&&from[1]===to[1])){ set(to); return; }
+  // Tawaf moves along the ring (anticlockwise); everything else moves straight
+  const st=G.T[G.i], onRing=G.kind==="tawaf"&&!st.pt&&G.prevA!=null;
+  const a0=G.prevA, a1=st.a; const t0=performance.now(), dur=700;
+  const step=now=>{
+    const k=Math.min(1,(now-t0)/dur), e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    if(onRing){ let d=a1-a0; if(d<0) d+=360; set(ringPt(a0+d*e)); }
+    else set([from[0]+(to[0]-from[0])*e, from[1]+(to[1]-from[1])*e]);
+    if(k<1) G.anim=requestAnimationFrame(step);
+  };
+  G.anim=requestAnimationFrame(step);
+}
+function drawHeading(st){
+  const h=document.getElementById("gHead"); if(!h) return;
+  if(G.kind==="sai" && st.to){ const p=stopPoint(st); h.setAttribute("d",`M150,${p[1]} L150,${SAI_Y[st.to]}`); }
+  else h.setAttribute("d","");
+}
+
+/* ---------- rendering ---------- */
+function gDuaHTML(d){
+  const lines=d.lines.map((l,i)=>`<span class="ln" data-i="${i}">${l.ar}</span>`).join("");
+  const ro=d.lines.map((l,i)=>`<span class="ln" data-i="${i}">${esc(l.ro)}</span>`).join("");
+  const can=hasAudio(d.id);
+  return `<div class="p-ar" lang="ar">${lines}</div>
+   ${S.ro?`<div class="p-ro">${ro}</div>`:""}
+   ${S.ur?`<p class="p-ur" lang="ur">${d.ur}</p>`:""}
+   ${S.en?`<p class="p-en">${esc(d.en)}</p>`:""}
+   <div class="g-row">
+     <button type="button" class="g-play" id="gPlay" ${can?"":"disabled"} aria-label="Play">${ICON_PLAY.replace('width="16" height="16"','width="28" height="28"')}</button>
+     <span class="g-meta" id="gMeta">${can?"Tap to listen":"No recording: read it aloud"}</span>
+     ${can?`<div class="seg" data-setting="repeat"><button type="button" data-v="1">1×</button><button type="button" data-v="3">3×</button><button type="button" data-v="0">Non-stop</button></div>`:""}
+   </div>`;
+}
+function gRender(){
+  const T=G.T, st=T[G.i], total=7, unit=G.kind==="tawaf"?"Round":"Trip";
+  const done=Math.max(0,Math.min(total, st.r-1)), now=st.r>=1&&st.r<=7?st.r:0;
+  document.getElementById("gTitle").textContent = G.kind==="tawaf"?"Guided Tawaf":"Guided Sa'i";
+  document.getElementById("gProg").textContent = st.r===0?"Before you start":st.r>7?`All 7 ${unit.toLowerCase()}s done`:`${unit} ${st.r} of 7`;
+  document.getElementById("gPips").innerHTML = `<span>${unit}s</span>`+Array.from({length:7},(_,k)=>`<span class="g-pip${k<done?" done":""}${k+1===now?" now":""}">${k+1}</span>`).join("");
+  document.getElementById("gWhere").textContent = st.where;
+  document.getElementById("gStop").textContent = st.t;
+  document.getElementById("gNote").textContent = st.note;
+  const ds=st.duas.map(id=>byId[id]).filter(Boolean);
+  G.sel=Math.min(G.sel,Math.max(0,ds.length-1));
+  document.getElementById("gChips").innerHTML = ds.length>1 ? ds.map((d,k)=>`<button type="button" class="g-chip" role="tab" data-k="${k}" aria-selected="${k===G.sel}">${hasAudio(d.id)?"♪ ":""}${esc(d.title)}</button>`).join("") : "";
+  document.getElementById("gDua").innerHTML = ds.length ? gDuaHTML(ds[G.sel]) : `<p class="g-free">No dua is required here. Make your own dua, or simply remember Allah.</p>`;
+  syncSegs();
+  document.querySelectorAll("#gSvg .gm-t").forEach(t=>t.classList.toggle("on",(t.dataset.k||"").split(" ").includes(st.k)||t.dataset.k===st.at||t.dataset.k===st.to));
+  const nx=T[G.i+1];
+  document.getElementById("gNext").textContent = st.last
+    ? (G.kind==="tawaf" ? "Start guided Sa'i\u00a0›" : "Finish\u00a0›")
+    : (nx.r!==st.r && nx.r<=7 && st.r>=1 ? `Reached ${G.kind==="tawaf"?"the Black Stone":nx.at} · ${unit} ${nx.r}\u00a0›` : `Next: ${nx.t}\u00a0›`);
+  document.getElementById("gBack").disabled = G.i===0;
+  drawHeading(st);
+  moveMarker(stopPoint(st)); G.prevA = st.a!=null ? st.a : null;
+  document.getElementById("gBody").scrollTop=0;
+  // keep the main counter in step with the guided route
+  C[G.kind]=done; GS[G.kind]=G.i; saveG(); drawCounter(); updLaunch();
+}
+function gGo(dir){
+  stop();
+  const st=G.T[G.i];
+  if(dir>0 && st.last){
+    if(G.kind==="tawaf"){ openGuided("sai",true); }
+    else { closeGuided(); location.hash="step-9"; }
+    return;
+  }
+  const ni=Math.max(0,Math.min(G.T.length-1,G.i+dir));
+  if(ni===G.i) return;
+  const crossed = dir>0 && G.T[ni].r!==st.r && st.r>=1;
+  G.i=ni; G.sel=0;
+  if(crossed){ try{navigator.vibrate&&navigator.vibrate([60,40,60])}catch(e){} }
+  gRender();
+}
+async function openGuided(kind,fresh){
+  stop(); G.kind=kind;
+  G.T = kind==="tawaf" ? buildTawaf(GS.mode==="full") : buildSai(GS.mode==="full");
+  if(fresh) GS[kind]=0;
+  G.i=Math.min(GS[kind]||0, G.T.length-1); G.sel=0; G.pos=null; G.prevA=null;
+  document.getElementById("gSvg").innerHTML = kind==="tawaf" ? tawafSVG() : saiSVG();
+  document.querySelectorAll("#gMode button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===GS.mode)));
+  G.el.hidden=false; document.body.style.overflow="hidden";
+  gRender();
+  try{ if(!G.lock) G.lock=await navigator.wakeLock.request("screen"); }catch(e){ G.lock=null; }
+}
+function closeGuided(){
+  stop(); G.el.hidden=true; document.body.style.overflow="";
+  document.getElementById("gMenu").hidden=true;
+  try{ G.lock&&G.lock.release(); }catch(e){} G.lock=null;
+}
+function updLaunch(){
+  document.querySelectorAll("[data-guided-status]").forEach(el=>{
+    const k=el.dataset.guidedStatus, i=GS[k]||0;
+    if(!i){ el.textContent = k==="tawaf"?"7 rounds · map · the dua for each corner":"7 trips · map · duas for Safa, Marwah and walking"; return; }
+    const T = k==="tawaf"?buildTawaf(GS.mode==="full"):buildSai(GS.mode==="full"), st=T[Math.min(i,T.length-1)];
+    el.textContent = st.r>7 ? "Completed · tap to open again" : `Continue: ${k==="tawaf"?"round":"trip"} ${Math.max(1,st.r)} of 7`;
+  });
+}
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-guided]"); if(!b) return;
+  e.preventDefault(); openGuided(b.dataset.guided,false);
+});
+document.getElementById("gClose").onclick=closeGuided;
+document.getElementById("gNext").onclick=()=>gGo(1);
+document.getElementById("gBack").onclick=()=>gGo(-1);
+document.getElementById("gMenuBtn").onclick=()=>{const m=document.getElementById("gMenu"); m.hidden=!m.hidden; document.getElementById("gMenuBtn").setAttribute("aria-expanded",String(!m.hidden));};
+document.getElementById("gMode").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b||b.dataset.v===GS.mode) return;
+  // keep the pilgrim in the same round/trip when switching between book and Sunnah duas
+  const r=G.T[G.i].r; GS.mode=b.dataset.v;
+  G.T = G.kind==="tawaf"?buildTawaf(GS.mode==="full"):buildSai(GS.mode==="full");
+  G.i=Math.max(0,G.T.findIndex(s=>s.r===r)); G.sel=0;
+  document.querySelectorAll("#gMode button").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.v===GS.mode)));
+  stop(); gRender();
+});
+let gResetArm=false; const gRestart=document.getElementById("gRestart");
+gRestart.onclick=()=>{
+  if(!gResetArm){ gResetArm=true; gRestart.textContent="Tap again to start again"; setTimeout(()=>{gResetArm=false;gRestart.textContent="Start again"},3000); return; }
+  gResetArm=false; gRestart.textContent="Start again"; G.i=0; G.sel=0; G.pos=null; G.prevA=null; stop(); gRender();
+  document.getElementById("gMenu").hidden=true;
+};
+document.getElementById("gChips").addEventListener("click",e=>{const c=e.target.closest(".g-chip"); if(!c) return; stop(); G.sel=+c.dataset.k; gRender();});
+document.getElementById("gDua").addEventListener("click",e=>{
+  if(!e.target.closest("#gPlay")) return;
+  const d=byId[G.T[G.i].duas[G.sel]]; if(!d) return;
+  if(session&&session.id===d.id) stop(); else play(d.id);
+});
+document.addEventListener("keydown",e=>{ if(G.el.hidden) return; if(e.key==="Escape") closeGuided(); if(e.key==="ArrowRight") gGo(1); if(e.key==="ArrowLeft") gGo(-1); });
+let gtx=null,gty=null;
+G.el.addEventListener("touchstart",e=>{gtx=e.touches[0].clientX;gty=e.touches[0].clientY},{passive:true});
+G.el.addEventListener("touchend",e=>{ if(gtx==null) return; const dx=e.changedTouches[0].clientX-gtx, dy=e.changedTouches[0].clientY-gty; if(Math.abs(dx)>80&&Math.abs(dx)>Math.abs(dy)*1.5) gGo(dx<0?1:-1); gtx=null; },{passive:true});
+views.add((ev,s,x)=>{
+  if(G.el.hidden) return; const st=G.T[G.i]; if(!st||s.id!==st.duas[G.sel]) return;
+  const box=document.getElementById("gDua"), btn=document.getElementById("gPlay"), meta=document.getElementById("gMeta"); if(!btn) return;
+  const lines=()=>box.querySelectorAll(".ln");
+  if(ev==="start"){ btn.classList.add("on"); btn.innerHTML=ICON_STOP.replace('width="16" height="16"','width="26" height="26"'); meta.textContent="Listening…"; }
+  if(ev==="line"){ lines().forEach(l=>l.classList.toggle("on", x===-1||+l.dataset.i===x)); const cur=x>=0&&box.querySelector(`.p-ar .ln[data-i="${x}"]`); if(cur) cur.scrollIntoView({block:"nearest",behavior:"smooth"}); }
+  if(ev==="turn"&&x) meta.innerHTML="<b>Now you say it</b>";
+  if(ev==="count") meta.innerHTML=`Played <b>${s.count}</b>${S.repeat==="0"?"":" of "+S.repeat}`;
+  if(ev==="error") meta.textContent=errText(x);
+  if(ev==="stop"){ btn.classList.remove("on"); btn.innerHTML=ICON_PLAY.replace('width="16" height="16"','width="28" height="28"'); lines().forEach(l=>l.classList.remove("on")); if(x!=="done") meta.textContent="Tap to listen"; }
+});
+updLaunch();
+
 /* ---------------- checklist ---------------- */
 const CK=[]; CHECK.forEach(([g,items],gi)=>items.forEach((t,i)=>CK.push({id:gi+"-"+i,g,t})));
 const done=new Set(ls.get("check2",[]));
@@ -1520,7 +1892,7 @@ const KMAP = [
 
 /* ---------------- two guides: Umrah and Madinah ---------------- */
 const NAV = {
-  umrah:[["#journey","Steps"],["#kaaba-map","Kaaba map"],["#more-duas","More duas"],["#counter","Counter"],["#places","Makkah places"],["#prepare","Ihram & checklist"]],
+  umrah:[["#journey","Steps"],["#kaaba-map","Kaaba map"],["#more-duas","More duas"],["#counter","Tawaf & Sa'i"],["#places","Makkah places"],["#prepare","Ihram & checklist"]],
   madinah:[["#madinah","Madinah steps"],["#madinah-places","Places & etiquette"]]
 };
 function setView(v){
